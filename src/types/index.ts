@@ -66,6 +66,8 @@ export interface TermProgress {
 
 export interface UserProfile {
   name: string;
+  email?: string;
+  photoURL?: string;
   createdAt: string;          // ISO date string
   currentLevel: number;
   totalXP: number;

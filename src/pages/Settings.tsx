@@ -1,14 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/config/firebaseConfig';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import LevelBadge from '@/components/ui/LevelBadge';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useUserStore } from '@/store/userStore';
-import { Music, Volume2, Zap, RotateCcw } from 'lucide-react';
+import { Music, Volume2, Zap, RotateCcw, LogOut } from 'lucide-react';
 
 const Settings: React.FC = () => {
+  const navigate = useNavigate();
   const { theme, soundEnabled, speechRate, preferredAccent, setTheme, setSoundEnabled, setSpeechRate, setPreferredAccent } =
     useSettingsStore();
   const { profile } = useUserStore();
@@ -17,6 +21,18 @@ const Settings: React.FC = () => {
     if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
       window.localStorage.clear();
       window.location.reload();
+    }
+  };
+
+  const handleLogout = async () => {
+    if (confirm('Are you sure you want to sign out?')) {
+      try {
+        await signOut(auth);
+        navigate('/login', { replace: true });
+      } catch (error) {
+        console.error('Error signing out:', error);
+        alert('Error signing out. Please try again.');
+      }
     }
   };
 
@@ -31,7 +47,7 @@ const Settings: React.FC = () => {
 
         {/* Profile Section */}
         <Card className="mb-8">
-          <div className="flex items-center gap-6 mb-8">
+          <div className="flex items-center gap-6">
             <LevelBadge level={profile.currentLevel} name="User" badge={['🌱', '💻', '⚡', '🏆', '🚀', '🏗️'][profile.currentLevel - 1]} size="lg" />
             <div>
               <h2 className="text-2xl font-bold mb-1">{profile.name}</h2>
@@ -48,9 +64,6 @@ const Settings: React.FC = () => {
               </div>
             </div>
           </div>
-          <Button variant="outline" size="lg" className="w-full">
-            Edit Profile
-          </Button>
         </Card>
 
         {/* Audio Settings */}
@@ -130,17 +143,26 @@ const Settings: React.FC = () => {
         </Card>
 
         {/* Data Settings */}
-        <Card>
+        <Card className="mb-8">
           <h2 className="text-2xl font-bold mb-6">⚙️ Data & Privacy</h2>
 
           <div className="space-y-4">
             <div className="p-4 bg-bg-elevated rounded-xl">
               <h3 className="font-semibold mb-2">Data Storage</h3>
-              <p className="text-sm text-text-secondary mb-4">Your progress is saved locally in your browser. No server uploads.</p>
+              <p className="text-sm text-text-secondary mb-4">Your progress is securely saved in the cloud and synchronized across devices.</p>
               <div className="flex gap-2">
-                <Badge label="✓ Offline First" variant="success" size="sm" />
+                <Badge label="☁️ Cloud Sync" variant="success" size="sm" />
                 <Badge label="✓ Private" variant="success" size="sm" />
               </div>
+            </div>
+
+            <div className="p-4 bg-bg-elevated rounded-xl">
+              <h3 className="font-semibold mb-2">Account</h3>
+              <p className="text-sm text-text-secondary mb-4">Email: {profile.email}</p>
+              <Button onClick={handleLogout} variant="danger" size="lg" className="w-full">
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
             </div>
 
             <div className="p-4 bg-bg-elevated rounded-xl">
