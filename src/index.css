@@ -1,0 +1,44 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply bg-bg-dark text-text-primary antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(108, 99, 255, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(108, 99, 255, 0.6);
+}
+
+/* Code highlighting */
+pre {
+  @apply bg-black rounded-lg p-4 overflow-x-auto;
+}
+
+code {
+  @apply font-mono text-sm;
+}
+
+/* Selection */
+::selection {
+  @apply bg-primary-500 bg-opacity-50;
+}

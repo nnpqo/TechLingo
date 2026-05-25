@@ -1,0 +1,10 @@
+{
+  "extends": ["config:base"],
+  "group": {
+    "dependencies": {
+      "packages": ["**"],
+      "excludePackageNames": ["zustand", "framer-motion", "react-router-dom"]
+    }
+  },
+  "schedule": ["after 9am every weekday"]
+}
