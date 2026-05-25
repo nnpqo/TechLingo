@@ -15,6 +15,7 @@ const Login: React.FC = () => {
   const { setProfile } = useUserStore();
   const [isSigningIn, setIsSigningIn] = React.useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Load user profile from Firestore when authenticated
   useEffect(() => {
@@ -70,7 +71,7 @@ const Login: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     if (isSigningIn) return;
-    setIsSigningIn(true);
+    setErrorMessage(null);
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
@@ -106,10 +107,37 @@ const Login: React.FC = () => {
 
       // Navigate after state update
       navigate('/', { replace: true });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing in:', error);
-      if ((error as any)?.code !== 'auth/popup-closed-by-user') {
-        alert('Error al iniciar sesión. Por favor intenta de nuevo.');
+      
+      let message = 'Error al iniciar sesión. Por favor intenta de nuevo.';
+      
+      if (error?.code === 'auth/popup-closed-by-user') {
+        message = 'Cancelaste la ventana de inicio de sesión.';
+      } else if (error?.code === 'auth/operation-not-allowed') {
+        message = 'Google Sign-In no está habilitado en Firebase.';
+      } else if (error?.code === 'auth/invalid-api-key') {
+        message = 'La configuración de Firebase no es válida.';
+      } else if (error?.code === 'auth/network-request-failed') {
+        message = 'Error de conexión. Verifica tu internet.';
+      } else if (error?.message?.includes('CORS')) {
+        message = 'El dominio no está autorizado en Firebase.';
+      }
+      
+      console.error('Error details:', {
+        code: error?.code,
+        message: error?.message,
+        config: {
+          apiKey: import.meta.env.VITE_FIREBASE_API_KEY ? '✓ Set' : '✗ Missing',
+          authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'No set',
+          projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'No set',
+        }
+      });
+      
+      setErrorMessage(message);
+      
+      if (error?.code !== 'auth/popup-closed-by-user') {
+        alert(message);
       }
     } finally {
       setIsSigningIn(false);
@@ -167,6 +195,31 @@ const Login: React.FC = () => {
               </li>
             </ul>
           </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-500 bg-opacity-20 border border-red-500 rounded-lg"
+            >
+              <p className="text-red-400 text-sm font-semibold mb-2">⚠️ {errorMessage}</p>
+              <details className="text-xs text-red-300">
+                <summary className="cursor-pointer hover:underline">Ver instrucciones de solución</summary>
+                <div className="mt-3 space-y-2 bg-bg-dark p-2 rounded">
+                  <p>1. Abre la consola del navegador (F12)</p>
+                  <p>2. Ve a la pestaña "Console"</p>
+                  <p>3. Busca "Error details:" y copia la información</p>
+                  <p>4. Si dice "Google Sign-In no está habilitado":</p>
+                  <p className="ml-4">→ Ve a tu Firebase Console</p>
+                  <p className="ml-4">→ Authentication → Google → Enable</p>
+                  <p>5. Si dice "El dominio no está autorizado":</p>
+                  <p className="ml-4">→ Firebase Console → Authentication → Settings</p>
+                  <p className="ml-4">→ Authorized domains → Agrega: nnpqo.github.io</p>
+                </div>
+              </details>
+            </motion.div>
+          )}
 
           {/* Sign In Button */}
           <motion.div
