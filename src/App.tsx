@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
@@ -18,7 +18,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen bg-bg-dark text-text-primary">
         <Header />
 
@@ -45,7 +45,7 @@ const App: React.FC = () => {
 
         <BottomNav />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
