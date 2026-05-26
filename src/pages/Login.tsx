@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '@/config/firebaseConfig';
@@ -11,69 +11,20 @@ import Card from '@/components/ui/Card';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [user, loading, authError] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const { setProfile } = useUserStore();
   const [isSigningIn, setIsSigningIn] = React.useState(false);
-  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
-  // Load user profile from Firestore when authenticated
   useEffect(() => {
-    if (user && !loading && !isLoadingProfile) {
-      setIsLoadingProfile(true);
-      const loadProfile = async () => {
-        try {
-          const userRef = doc(db, 'users', user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            const data = userSnap.data();
-            setProfile({
-              name: data.name || user.displayName || 'Learner',
-              email: user.email || '',
-              photoURL: user.photoURL || '',
-              createdAt: data.createdAt,
-              currentLevel: data.currentLevel || 1,
-              totalXP: data.totalXP || 0,
-              streak: data.streak || 0,
-              lastStudiedDate: data.lastStudiedDate || new Date().toISOString(),
-            });
-          } else {
-            // New user - set default profile
-            setProfile({
-              name: user.displayName || 'Learner',
-              email: user.email || '',
-              photoURL: user.photoURL || '',
-              createdAt: new Date().toISOString(),
-              currentLevel: 1,
-              totalXP: 0,
-              streak: 0,
-              lastStudiedDate: new Date().toISOString(),
-            });
-          }
-          
-          // Navigate after small delay to ensure state is updated
-          setTimeout(() => {
-            navigate('/', { replace: true });
-          }, 300);
-        } catch (error) {
-          console.error('Error loading profile:', error);
-          setTimeout(() => {
-            navigate('/', { replace: true });
-          }, 300);
-        } finally {
-          setIsLoadingProfile(false);
-        }
-      };
-      loadProfile();
+    if (user && !loading) {
+      navigate('/', { replace: true });
     }
-  }, [user, loading, navigate, setProfile, isLoadingProfile]);
+  }, [user, loading, navigate]);
 
   const handleGoogleSignIn = async () => {
-    if (isSigningIn) return;
     setIsSigningIn(true);
     try {
       const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
       const result = await signInWithPopup(auth, provider);
       const userRef = doc(db, 'users', result.user.uid);
       const userSnap = await getDoc(userRef);
@@ -92,36 +43,33 @@ const Login: React.FC = () => {
         });
       }
 
-      // Update local store immediately
+      // Update local store
       setProfile({
         name: result.user.displayName || 'Learner',
+        createdAt: new Date().toISOString(),
+        currentLevel: 1,
+        totalXP: 0,
+        streak: 0,
+        lastStudiedDate: new Date().toISOString(),
         email: result.user.email || '',
         photoURL: result.user.photoURL || '',
-        createdAt: userSnap.exists() ? userSnap.data().createdAt : new Date().toISOString(),
-        currentLevel: userSnap.exists() ? userSnap.data().currentLevel : 1,
-        totalXP: userSnap.exists() ? userSnap.data().totalXP : 0,
-        streak: userSnap.exists() ? userSnap.data().streak : 0,
-        lastStudiedDate: userSnap.exists() ? userSnap.data().lastStudiedDate : new Date().toISOString(),
       });
 
-      // Navigate after state update
       navigate('/', { replace: true });
     } catch (error) {
       console.error('Error signing in:', error);
-      if ((error as any)?.code !== 'auth/popup-closed-by-user') {
-        alert('Error al iniciar sesión. Por favor intenta de nuevo.');
-      }
+      alert('Error signing in. Please try again.');
     } finally {
       setIsSigningIn(false);
     }
   };
 
-  if (loading || isLoadingProfile) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-bg-dark">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-text-secondary">Cargando...</p>
+          <p className="text-text-secondary">Loading...</p>
         </div>
       </div>
     );
@@ -147,23 +95,23 @@ const Login: React.FC = () => {
               🚀
             </motion.div>
             <h1 className="text-3xl font-bold text-text-primary mb-2">TechLingo</h1>
-            <p className="text-text-secondary">Aprende Inglés Técnico</p>
+            <p className="text-text-secondary">Master Technical English</p>
           </div>
 
           {/* Description */}
           <div className="mb-8 space-y-4">
             <p className="text-center text-text-secondary">
-              Aprende vocabulario técnico en inglés con ejercicios interactivos y mejora tu carrera.
+              Learn programming vocabulary in English through interactive exercises and boost your career.
             </p>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-center gap-2">
-                <span className="text-primary-500">✓</span> Lecciones interactivas en 6 áreas
+                <span className="text-primary-500">✓</span> Interactive lessons across 6 tech areas
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-primary-500">✓</span> Rastrea tu progreso y gana insignias
+                <span className="text-primary-500">✓</span> Track your progress and earn badges
               </li>
               <li className="flex items-center gap-2">
-                <span className="text-primary-500">✓</span> Practica pronunciación y escucha
+                <span className="text-primary-500">✓</span> Practice pronunciation and listening
               </li>
             </ul>
           </div>
@@ -182,7 +130,7 @@ const Login: React.FC = () => {
               {isSigningIn ? (
                 <>
                   <div className="animate-spin h-5 w-5 border-2 border-bg-dark border-t-primary-500 rounded-full" />
-                  Iniciando sesión...
+                  Signing in...
                 </>
               ) : (
                 <>
@@ -204,7 +152,7 @@ const Login: React.FC = () => {
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     />
                   </svg>
-                  Registrarse con Google
+                  Sign in with Google
                 </>
               )}
             </Button>
@@ -212,7 +160,7 @@ const Login: React.FC = () => {
 
           {/* Footer */}
           <p className="text-xs text-text-secondary text-center mt-6">
-            Al iniciar sesión, aceptas nuestros Términos de Servicio y Política de Privacidad
+            By signing in, you agree to our Terms of Service and Privacy Policy
           </p>
         </Card>
 
