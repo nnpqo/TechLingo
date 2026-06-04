@@ -21,15 +21,16 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
   pronunciation_guide,
   definition_en,
   definition_es,
-  codeExample,
-  contextSentence,
+  codeExample: _codeExample,
+  contextSentence: _contextSentence,
 }) => {
   const { speak, isSupported } = useSpeechSynthesis();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const preferredAccent = useSettingsStore((state) => state.preferredAccent);
 
   const handleSpeak = () => {
     if (soundEnabled && isSupported) {
-      speak(term, 'en-US');
+      speak(term, preferredAccent === 'uk' ? 'en-GB' : 'en-US');
     }
   };
 
@@ -74,20 +75,6 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
           <p className="text-text-primary">{definition_es}</p>
         </div>
       </div>
-
-      {/* Context Sentence */}
-      <div className="mb-6 p-4 bg-bg-elevated rounded-xl border-l-4 border-warning">
-        <p className="text-sm text-text-secondary mb-2">In Context:</p>
-        <p className="text-text-primary italic">"{contextSentence}"</p>
-      </div>
-
-      {/* Code Example */}
-      {codeExample && (
-        <div className="mb-6 p-4 bg-black rounded-xl font-mono text-sm overflow-x-auto">
-          <p className="text-text-secondary mb-2">Code Example:</p>
-          <pre className="text-secondary whitespace-pre-wrap break-words">{codeExample}</pre>
-        </div>
-      )}
     </motion.div>
   );
 };

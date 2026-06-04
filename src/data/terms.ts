@@ -1,10 +1,14 @@
 import { Term } from '@/types/index';
-import { cybersecurityTerms as cybersecurityTermsData } from './cybersecurity-terms';
-import { frontendTerms as frontendTermsData } from './frontend-terms';
-import { backendTerms as backendTermsData } from './backend-terms';
-import { databaseTerms as databaseTermsData } from './database-terms';
-import { devopsTerms as devopsTermsData } from './devops-terms';
-import { networkingTerms as networkingTermsData } from './networking-terms';
+import {
+  cybersecurityTerms as cybersecurityTermsData,
+  frontendTerms as frontendTermsData,
+  backendTerms as backendTermsData,
+  databaseTerms as databaseTermsData,
+  devopsTerms as devopsTermsData,
+  networkingTerms as networkingTermsData,
+  allTerms as allTermsData,
+  allTermsByArea as allTermsByAreaData,
+} from './terms-1000';
 
 // Re-export all terms from their respective files
 export const cybersecurityTerms: Term[] = cybersecurityTermsData;
@@ -15,23 +19,9 @@ export const devopsTerms: Term[] = devopsTermsData;
 export const networkingTerms: Term[] = networkingTermsData;
 
 // Consolidated exports for easy access
-export const allTermsByArea = {
-  cybersecurity: cybersecurityTerms,
-  frontend: frontendTerms,
-  backend: backendTerms,
-  database: databaseTerms,
-  devops: devopsTerms,
-  networking: networkingTerms
-};
+export const allTermsByArea = allTermsByAreaData;
 
-export const allTerms: Term[] = [
-  ...cybersecurityTerms,
-  ...frontendTerms,
-  ...backendTerms,
-  ...databaseTerms,
-  ...devopsTerms,
-  ...networkingTerms
-];
+export const allTerms: Term[] = allTermsData;
 
 // Helper functions
 export const getTermsByArea = (area: string): Term[] => {
@@ -51,5 +41,3 @@ export const termStats = {
   networking: networkingTerms.length,
   total: allTerms.length
 };
-
-console.log('📚 Loaded terms statistics:', termStats);

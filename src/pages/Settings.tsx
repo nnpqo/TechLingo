@@ -3,15 +3,11 @@ import { motion } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import LevelBadge from '@/components/ui/LevelBadge';
 import { useSettingsStore } from '@/store/settingsStore';
-import { useUserStore } from '@/store/userStore';
-import { Music, Volume2, Zap, RotateCcw } from 'lucide-react';
+import { Volume2, Zap, RotateCcw } from 'lucide-react';
 
 const Settings: React.FC = () => {
-  const { theme, soundEnabled, speechRate, preferredAccent, setTheme, setSoundEnabled, setSpeechRate, setPreferredAccent } =
-    useSettingsStore();
-  const { profile } = useUserStore();
+  const { soundEnabled, speechRate, preferredAccent, setSoundEnabled, setSpeechRate, setPreferredAccent } = useSettingsStore();
 
   const handleReset = () => {
     if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
@@ -26,32 +22,8 @@ const Settings: React.FC = () => {
         {/* Header */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-12">
           <h1 className="text-4xl font-bold text-text-primary mb-2">Settings</h1>
-          <p className="text-lg text-text-secondary">Customize your TechLingo experience</p>
+          <p className="text-lg text-text-secondary">Configuración de audio y preferencias</p>
         </motion.div>
-
-        {/* Profile Section */}
-        <Card className="mb-8">
-          <div className="flex items-center gap-6 mb-8">
-            <LevelBadge level={profile.currentLevel} name="User" badge={['🌱', '💻', '⚡', '🏆', '🚀', '🏗️'][profile.currentLevel - 1]} size="lg" />
-            <div>
-              <h2 className="text-2xl font-bold mb-1">{profile.name}</h2>
-              <p className="text-text-secondary">Level {profile.currentLevel}</p>
-              <div className="mt-3 flex gap-4">
-                <div>
-                  <span className="text-lg font-bold text-primary-500">{profile.totalXP}</span>
-                  <span className="text-sm text-text-secondary ml-1">Total XP</span>
-                </div>
-                <div>
-                  <span className="text-lg font-bold text-secondary">🔥 {profile.streak}</span>
-                  <span className="text-sm text-text-secondary ml-1">Day Streak</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <Button variant="outline" size="lg" className="w-full">
-            Edit Profile
-          </Button>
-        </Card>
 
         {/* Audio Settings */}
         <Card className="mb-8">
@@ -115,17 +87,6 @@ const Settings: React.FC = () => {
                 </button>
               ))}
             </div>
-          </div>
-        </Card>
-
-        {/* Appearance Settings */}
-        <Card className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">🎨 Appearance</h2>
-
-          <div className="p-4 bg-bg-elevated rounded-xl border-l-4 border-secondary">
-            <p className="font-semibold mb-1">Theme</p>
-            <p className="text-sm text-text-secondary mb-3">Currently using Dark theme (optimized for learning sessions)</p>
-            <Badge label="🌙 Dark Mode" variant="primary" />
           </div>
         </Card>
 

@@ -16,7 +16,7 @@ const Areas: React.FC = () => {
     {
       id: 'cybersecurity',
       name: '🔐 Cybersecurity',
-      description: 'Learn firewall, encryption, phishing, authentication, and more security concepts',
+      description: 'Esta área se encarga de proteger sistemas, redes y datos contra ataques y accesos no autorizados.',
       icon: '🔐',
       color: 'cyber',
       gradient: 'from-cyber to-red-900',
@@ -24,7 +24,7 @@ const Areas: React.FC = () => {
     {
       id: 'frontend',
       name: '🌐 Web Frontend',
-      description: 'Master DOM, React, CSS, responsive design, and browser APIs',
+      description: 'Esta área se enfoca en la interfaz: lo que ve el usuario en el navegador (UI, UX, HTML, CSS y JavaScript).',
       icon: '🌐',
       color: 'frontend',
       gradient: 'from-frontend to-blue-900',
@@ -32,7 +32,7 @@ const Areas: React.FC = () => {
     {
       id: 'backend',
       name: '⚙️ Backend',
-      description: 'Explore APIs, REST, Node.js, databases, and server architecture',
+      description: 'Esta área se encarga de la lógica del servidor: APIs, autenticación, reglas de negocio e integración con datos.',
       icon: '⚙️',
       color: 'backend',
       gradient: 'from-backend to-green-900',
@@ -40,7 +40,7 @@ const Areas: React.FC = () => {
     {
       id: 'database',
       name: '🗄️ Databases',
-      description: 'Understand SQL, schemas, transactions, indexing, and database design',
+      description: 'Esta área gestiona el almacenamiento y consulta de información: modelos de datos, SQL, índices y transacciones.',
       icon: '🗄️',
       color: 'database',
       gradient: 'from-database to-yellow-900',
@@ -48,7 +48,7 @@ const Areas: React.FC = () => {
     {
       id: 'devops',
       name: '🚀 DevOps',
-      description: 'Learn CI/CD, Docker, Kubernetes, monitoring, and deployment strategies',
+      description: 'Esta área une desarrollo y operaciones: despliegues, CI/CD, contenedores, monitoreo y automatización.',
       icon: '🚀',
       color: 'devops',
       gradient: 'from-devops to-orange-900',
@@ -56,7 +56,7 @@ const Areas: React.FC = () => {
     {
       id: 'networking',
       name: '🌍 Networking',
-      description: 'Grasp protocols, IP, DNS, TCP/UDP, VPN, and network architecture',
+      description: 'Esta área se enfoca en cómo se conectan los sistemas: IP, DNS, protocolos, routing y arquitectura de redes.',
       icon: '🌍',
       color: 'network',
       gradient: 'from-network to-purple-900',

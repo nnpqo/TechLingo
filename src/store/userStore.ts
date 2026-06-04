@@ -3,11 +3,20 @@ import { persist } from 'zustand/middleware';
 import { UserProfile, TermProgress, Achievement } from '@/types/index';
 
 interface UserStore {
+  auth: {
+    isAuthenticated: boolean;
+    email?: string;
+  };
   profile: UserProfile;
   termProgress: Record<string, TermProgress>;
   completedLessons: string[];
   achievements: Achievement[];
   
+  // Auth actions (simulated)
+  register: (params: { name?: string; email?: string; password?: string }) => void;
+  login: (params: { email?: string; password?: string; name?: string }) => void;
+  logout: () => void;
+
   // Profile actions
   setProfile: (profile: UserProfile) => void;
   updateXP: (xpGained: number) => void;
@@ -37,6 +46,26 @@ const DEFAULT_PROFILE: UserProfile = {
   totalXP: 0,
   streak: 0,
   lastStudiedDate: new Date().toISOString(),
+};
+
+const DEFAULT_AUTH = {
+  isAuthenticated: false,
+  email: undefined as string | undefined,
+};
+
+const isSameLocalDay = (aIso: string, bIso: string) => {
+  const a = new Date(aIso);
+  const b = new Date(bIso);
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+};
+
+const isYesterdayLocalDay = (previousIso: string, nowIso: string) => {
+  const prev = new Date(previousIso);
+  const now = new Date(nowIso);
+  const prevMidnight = new Date(prev.getFullYear(), prev.getMonth(), prev.getDate()).getTime();
+  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const diffDays = Math.round((nowMidnight - prevMidnight) / (1000 * 60 * 60 * 24));
+  return diffDays === 1;
 };
 
 const LEVEL_CONFIG = [
@@ -70,10 +99,42 @@ const calculateLevel = (xp: number, wordsPracticed: number): number => {
 export const useUserStore = create<UserStore>()(
   persist(
     (set, get) => ({
+      auth: DEFAULT_AUTH,
       profile: DEFAULT_PROFILE,
       termProgress: {},
       completedLessons: [],
       achievements: [],
+
+      register: ({ name, email }) => {
+        const safeName = (name || '').trim() || 'Learner';
+        set((state) => ({
+          auth: { isAuthenticated: true, email },
+          profile: {
+            ...state.profile,
+            name: safeName,
+            createdAt: state.profile.createdAt || new Date().toISOString(),
+          },
+        }));
+      },
+
+      login: ({ email, name }) => {
+        const safeName = (name || '').trim();
+        set((state) => ({
+          auth: { isAuthenticated: true, email },
+          profile: safeName
+            ? {
+                ...state.profile,
+                name: safeName,
+              }
+            : state.profile,
+        }));
+      },
+
+      logout: () => {
+        set(() => ({
+          auth: DEFAULT_AUTH,
+        }));
+      },
       
       setProfile: (profile) => set({ profile }),
       
@@ -97,13 +158,36 @@ export const useUserStore = create<UserStore>()(
       },
       
       updateStreak: (days) => {
-        set((state) => ({
-          profile: {
-            ...state.profile,
-            streak: days,
-            lastStudiedDate: new Date().toISOString(),
-          },
-        }));
+        set((state) => {
+          const nowIso = new Date().toISOString();
+
+          // If the user studied today already, do not change streak.
+          if (state.profile.lastStudiedDate && isSameLocalDay(state.profile.lastStudiedDate, nowIso)) {
+            return {
+              profile: {
+                ...state.profile,
+                lastStudiedDate: nowIso,
+              },
+            };
+          }
+
+          // If they studied yesterday, increment streak; otherwise reset to 1.
+          const nextStreak =
+            state.profile.lastStudiedDate && isYesterdayLocalDay(state.profile.lastStudiedDate, nowIso)
+              ? (state.profile.streak || 0) + 1
+              : 1;
+
+          // Preserve the passed param for backwards compatibility but prefer computed streak.
+          const finalStreak = Math.max(nextStreak, days || 0);
+
+          return {
+            profile: {
+              ...state.profile,
+              streak: finalStreak,
+              lastStudiedDate: nowIso,
+            },
+          };
+        });
       },
       
       updateTermProgress: (termId, progress) => {

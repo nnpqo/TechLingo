@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, BookOpen, Trophy, Settings, Brain } from 'lucide-react';
+import { Brain, User, Settings as SettingsIcon } from 'lucide-react';
 import LevelBadge from '@/components/ui/LevelBadge';
 import { useProgress } from '@/hooks/useProgress';
 
@@ -23,13 +23,26 @@ const Header: React.FC = () => {
 
         <div className="hidden md:flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-text-secondary">Level {profile.currentLevel}</span>
+            <span className="text-sm text-text-secondary">Nivel: {levelInfo.name}</span>
             <LevelBadge level={profile.currentLevel} name={levelInfo.name} badge={levelInfo.badge} size="sm" />
           </div>
-          <div className="text-right">
-            <div className="text-sm text-text-secondary">XP</div>
-            <div className="font-bold">{profile.totalXP}</div>
-          </div>
+
+          <nav className="flex items-center gap-2">
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-color text-text-secondary hover:text-text-primary hover:border-primary-500 transition-colors"
+            >
+              <User className="w-4 h-4" />
+              <span className="text-sm font-semibold">Perfil</span>
+            </Link>
+            <Link
+              to="/settings"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border-color text-text-secondary hover:text-text-primary hover:border-primary-500 transition-colors"
+            >
+              <SettingsIcon className="w-4 h-4" />
+              <span className="text-sm font-semibold">Settings</span>
+            </Link>
+          </nav>
         </div>
       </div>
     </motion.header>

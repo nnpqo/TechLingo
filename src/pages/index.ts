@@ -5,3 +5,5 @@ export { default as Progress } from './Progress';
 export { default as Settings } from './Settings';
 export { default as Lesson } from './Lesson';
 export { default as LearningPath } from './LearningPath';
+export { default as Auth } from './Auth';
+export { default as Profile } from './Profile';

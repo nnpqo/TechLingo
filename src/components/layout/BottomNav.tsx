@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, BookOpen, Trophy, Settings, Zap } from 'lucide-react';
+import { Home, BookOpen, Settings, Zap, User } from 'lucide-react';
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const BottomNav: React.FC = () => {
     { path: '/', icon: Home, label: 'Home' },
     { path: '/areas', icon: BookOpen, label: 'Learn' },
     { path: '/glossary', icon: Zap, label: 'Glossary' },
-    { path: '/progress', icon: Trophy, label: 'Progress' },
+    { path: '/profile', icon: User, label: 'Perfil' },
     { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 

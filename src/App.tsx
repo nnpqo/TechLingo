@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { HashRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
-import { Home, Areas, Glossary, Progress, Settings, Lesson, LearningPath } from '@/pages';
+import { Home, Areas, Glossary, Settings, Lesson, LearningPath, Auth, Profile } from '@/pages';
 import { useUserStore } from '@/store/userStore';
 
-const App: React.FC = () => {
-  const profile = useUserStore((state) => state.profile);
-  const setProfile = useUserStore((state) => state.setProfile);
+const RequireAuth: React.FC = () => {
+  const location = useLocation();
+  const isAuthenticated = useUserStore((s) => s.auth.isAuthenticated);
 
-  useEffect(() => {
-    // Initialize user profile if needed
-    if (!profile.name || profile.name === 'Learner') {
-      // Profile already initialized from localStorage via Zustand persist
-    }
-  }, []);
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace state={{ from: location.pathname }} />;
+  }
+
+  return <Outlet />;
+};
+
+const App: React.FC = () => {
+  const isAuthenticated = useUserStore((s) => s.auth.isAuthenticated);
 
   return (
     <HashRouter>
       <div className="min-h-screen bg-bg-dark text-text-primary">
-        <Header />
+        {isAuthenticated && <Header />}
 
         <AnimatePresence mode="wait">
           <motion.main
@@ -31,19 +34,27 @@ const App: React.FC = () => {
             className="min-h-screen"
           >
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/areas" element={<Areas />} />
-              <Route path="/lesson/:areaId/:lessonId" element={<Lesson />} />
-              <Route path="/glossary" element={<Glossary />} />
-              <Route path="/progress" element={<Progress />} />
-              <Route path="/learning-path" element={<LearningPath />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="/auth" element={<Auth />} />
+
+              <Route element={<RequireAuth />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/areas" element={<Areas />} />
+                <Route path="/lesson/:areaId/:lessonId" element={<Lesson />} />
+                <Route path="/glossary" element={<Glossary />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/learning-path" element={<LearningPath />} />
+                <Route path="/settings" element={<Settings />} />
+
+                {/* Backwards compat */}
+                <Route path="/progress" element={<Navigate to="/profile" replace />} />
+              </Route>
+
+              <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/auth'} replace />} />
             </Routes>
           </motion.main>
         </AnimatePresence>
 
-        <BottomNav />
+        {isAuthenticated && <BottomNav />}
       </div>
     </HashRouter>
   );

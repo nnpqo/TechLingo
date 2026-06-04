@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { useSettingsStore } from '@/store/settingsStore';
 
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
@@ -69,6 +70,7 @@ export interface PronunciationResult {
 export const useSpeechRecognition = () => {
   const recognitionRef = useRef<any>(null);
   const [isListening, setIsListening] = useState(false);
+  const preferredAccent = useSettingsStore((state) => state.preferredAccent);
   const [isSupported] = useState(() => {
     if (typeof window === 'undefined') return false;
     const SpeechRecognition =
@@ -94,8 +96,9 @@ export const useSpeechRecognition = () => {
           recognitionRef.current = new SpeechRecognition();
           recognitionRef.current.continuous = false;
           recognitionRef.current.interimResults = false;
-          recognitionRef.current.lang = 'en-US';
         }
+
+        recognitionRef.current.lang = preferredAccent === 'uk' ? 'en-GB' : 'en-US';
 
         const recognition = recognitionRef.current;
 
@@ -160,7 +163,7 @@ export const useSpeechRecognition = () => {
         setIsListening(false);
       }
     },
-    [isSupported]
+    [isSupported, preferredAccent]
   );
 
   const stopListening = useCallback(() => {

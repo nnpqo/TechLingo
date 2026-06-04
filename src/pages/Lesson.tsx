@@ -10,7 +10,7 @@ import { cybersecurityTerms, frontendTerms, backendTerms, databaseTerms, devopsT
 import { Term, ExerciseResult } from '@/types/index';
 import { useUserStore } from '@/store/userStore';
 import { useProgress } from '@/hooks/useProgress';
-import { ArrowLeft, Heart, Zap } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 type ExerciseType = 'pronunciation' | 'fillInBlank' | 'multipleChoice';
 
@@ -22,10 +22,10 @@ const getExerciseType = (termIndex: number): ExerciseType => {
 const Lesson: React.FC = () => {
   const { areaId, lessonId } = useParams<{ areaId: string; lessonId: string }>();
   const navigate = useNavigate();
-  const updateXP = useUserStore((state) => state.updateXP);
   const recordTermAttempt = useUserStore((state) => state.recordTermAttempt);
   const markTermLearned = useUserStore((state) => state.markTermLearned);
   const updateStreak = useUserStore((state) => state.updateStreak);
+  const addCompletedLesson = useUserStore((state) => state.addCompletedLesson);
   const profile = useUserStore((state) => state.profile);
   const { getLevelInfo } = useProgress();
   const levelInfo = getLevelInfo();
@@ -34,7 +34,8 @@ const Lesson: React.FC = () => {
   const [currentTermIndex, setCurrentTermIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [lessonXP, setLessonXP] = useState(0);
+  const [lessonCompleted, setLessonCompleted] = useState(false);
+  const [sessionSeed, setSessionSeed] = useState(() => Date.now());
 
   // Get lesson difficulty based on user level
   const getLessonLevel = (): 'beginner' | 'intermediate' | 'advanced' => {
@@ -67,7 +68,10 @@ const Lesson: React.FC = () => {
 
     setTerms(selectedTerms.length > 0 ? selectedTerms : availableTerms.slice(0, 10));
     setCurrentTermIndex(0);
-  }, [areaId]);
+    setCorrectAnswers(0);
+    setShowResult(false);
+    setLessonCompleted(false);
+  }, [areaId, sessionSeed]);
 
   if (terms.length === 0) {
     return (
@@ -90,33 +94,27 @@ const Lesson: React.FC = () => {
       markTermLearned(currentTerm.id, result.score || 100);
     }
     
-    // Calculate XP based on difficulty
-    let xpReward = result.xpEarned;
     if (result.isCorrect) {
-      const difficultMultiplier = getLessonLevel() === 'beginner' ? 1 : getLessonLevel() === 'intermediate' ? 2 : 3;
-      xpReward = result.xpEarned * difficultMultiplier;
-      setCorrectAnswers(correctAnswers + 1);
+      setCorrectAnswers((prev) => prev + 1);
     }
-    
-    updateXP(xpReward);
-    setLessonXP(lessonXP + xpReward);
     setShowResult(true);
 
     setTimeout(() => {
       if (isLastTerm) {
-        // Update streak when lesson completes - increment by 1 from current
-        const newStreak = (profile.streak || 0) + 1;
-        updateStreak(newStreak);
-        // Show lesson summary
-        setTimeout(() => {
-          navigate('/');
-        }, 300);
+        // Mark lesson completion and update streak once per day
+        addCompletedLesson(`${areaId || 'area'}-${lessonId || '1'}`);
+        updateStreak((profile.streak || 0) + 1);
+        setLessonCompleted(true);
       } else {
         setCurrentTermIndex(currentTermIndex + 1);
         setShowResult(false);
       }
     }, 2000);
   };
+
+  const totalQuestions = terms.length;
+  const incorrectAnswers = Math.max(0, totalQuestions - correctAnswers);
+  const accuracy = totalQuestions ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
   return (
     <div className="min-h-screen bg-bg-dark pb-20">
@@ -134,16 +132,6 @@ const Lesson: React.FC = () => {
             <ArrowLeft className="w-5 h-5" />
             Back
           </button>
-          <div className="flex items-center gap-2">
-            {[...Array(3)].map((_, i) => (
-              <Heart
-                key={i}
-                className={`w-6 h-6 ${
-                  i < 3 ? 'text-accent fill-accent' : 'text-text-secondary'
-                }`}
-              />
-            ))}
-          </div>
         </motion.div>
 
         {/* Progress */}
@@ -158,10 +146,6 @@ const Lesson: React.FC = () => {
               </p>
             </div>
             <div className="text-right">
-              <div className="flex items-center gap-1 mb-1">
-                <Zap className="w-4 h-4 text-secondary" />
-                <span className="font-semibold text-secondary">{lessonXP} XP</span>
-              </div>
               <span className="text-sm text-text-secondary">
                 {Math.round(((currentTermIndex + 1) / terms.length) * 100)}% complete
               </span>
@@ -194,7 +178,7 @@ const Lesson: React.FC = () => {
         </motion.div>
 
         {/* Exercise */}
-        {!showResult && (
+        {!showResult && !lessonCompleted && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             {getExerciseType(currentTermIndex) === 'pronunciation' && (
               <PronunciationExercise
@@ -229,7 +213,7 @@ const Lesson: React.FC = () => {
         )}
 
         {/* Result Message */}
-        {showResult && (
+        {showResult && !lessonCompleted && (
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -239,6 +223,53 @@ const Lesson: React.FC = () => {
             <p className="text-xl text-secondary font-semibold">
               {isLastTerm ? 'Lesson Complete!' : 'Moving to next term...'}
             </p>
+          </motion.div>
+        )}
+
+        {/* Final Quiz Result */}
+        {lessonCompleted && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
+            <Card className="text-center">
+              <div className="text-5xl mb-3">📊</div>
+              <h3 className="text-2xl font-bold mb-2">Resultado del quiz</h3>
+              <p className="text-text-secondary mb-6">Así te fue en esta práctica</p>
+
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="p-3 rounded-xl bg-bg-elevated">
+                  <div className="text-2xl font-bold text-secondary">{correctAnswers}</div>
+                  <div className="text-xs text-text-secondary">Correctas</div>
+                </div>
+                <div className="p-3 rounded-xl bg-bg-elevated">
+                  <div className="text-2xl font-bold text-accent">{incorrectAnswers}</div>
+                  <div className="text-xs text-text-secondary">Incorrectas</div>
+                </div>
+                <div className="p-3 rounded-xl bg-bg-elevated">
+                  <div className="text-2xl font-bold text-primary-500">{accuracy}%</div>
+                  <div className="text-xs text-text-secondary">Precisión</div>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <ProgressBar current={correctAnswers} max={Math.max(1, totalQuestions)} color="bg-secondary" animated={false} showLabel={false} />
+                <p className="text-xs text-text-secondary mt-2">
+                  {correctAnswers} de {totalQuestions} preguntas
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <Button className="flex-1" onClick={() => navigate('/')}
+                >
+                  Volver al inicio
+                </Button>
+                <Button
+                  className="flex-1"
+                  variant="outline"
+                  onClick={() => setSessionSeed(Date.now())}
+                >
+                  Reintentar
+                </Button>
+              </div>
+            </Card>
           </motion.div>
         )}
       </div>
