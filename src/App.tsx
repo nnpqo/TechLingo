@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
-import { Home, Areas, Glossary, Settings, Lesson, LearningPath, Auth, Profile } from '@/pages';
+import { Home, Areas, Settings, Lesson, Auth, Profile } from '@/pages';
 import { useUserStore } from '@/store/userStore';
 
 const RequireAuth: React.FC = () => {
@@ -40,13 +40,13 @@ const App: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/areas" element={<Areas />} />
                 <Route path="/lesson/:areaId/:lessonId" element={<Lesson />} />
-                <Route path="/glossary" element={<Glossary />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/learning-path" element={<LearningPath />} />
                 <Route path="/settings" element={<Settings />} />
 
                 {/* Backwards compat */}
                 <Route path="/progress" element={<Navigate to="/profile" replace />} />
+                <Route path="/glossary" element={<Navigate to="/areas" replace />} />
+                <Route path="/learning-path" element={<Navigate to="/areas" replace />} />
               </Route>
 
               <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/auth'} replace />} />
