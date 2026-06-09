@@ -143,7 +143,7 @@ export const frontendTerms: Term[] = [
     "area": "frontend",
     "level": "beginner",
     "codeExample": "const element = document.getElementById('myElement');\nelement.textContent = 'New content';\nelement.style.color = 'blue';",
-    "contextSentence": "When you click 'Add to Cart' on Shopify stores, DOM manipulation dynamically adds the item to your cart counter without reloading the page."
+    "contextSentence": "When you click 'Add to Cart' on Shopify stores, DOM manipulation dynamically adds the item to your cart counter without reloading the page.",
     "practicalExamples": [
       {
         "title": "Updating User Information on the Page",
