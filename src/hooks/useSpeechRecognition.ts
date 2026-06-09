@@ -46,10 +46,23 @@ const levenshteinDistance = (a: string, b: string): number => {
   return matrix[b.length][a.length];
 };
 
+const normalizeSpeechText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/\+/g, ' plus ')
+    .replace(/#/g, ' sharp ')
+    .replace(/\//g, ' slash ')
+    .replace(/[_-]/g, ' ')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 // Calculate similarity score (0-100)
 const calculateSimilarity = (spoken: string, expected: string): number => {
-  const spokenLower = spoken.toLowerCase().trim();
-  const expectedLower = expected.toLowerCase().trim();
+  const spokenLower = normalizeSpeechText(spoken);
+  const expectedLower = normalizeSpeechText(expected);
 
   const distance = levenshteinDistance(spokenLower, expectedLower);
   const maxLength = Math.max(spokenLower.length, expectedLower.length);
@@ -71,33 +84,41 @@ export const useSpeechRecognition = () => {
   const recognitionRef = useRef<any>(null);
   const [isListening, setIsListening] = useState(false);
   const preferredAccent = useSettingsStore((state) => state.preferredAccent);
+
   const [isSupported] = useState(() => {
     if (typeof window === 'undefined') return false;
+
     const SpeechRecognition =
-      window.webkitSpeechRecognition || (window as any).SpeechRecognition;
+      window.webkitSpeechRecognition || window.SpeechRecognition;
+
     return !!SpeechRecognition;
   });
+
   const [error, setError] = useState<string | null>(null);
 
   const startListening = useCallback(
     (onResult: (result: PronunciationResult) => void, expectedTerm: string) => {
       if (!isSupported) {
         setError(
-          'Speech Recognition not supported. Please try a different browser.'
+          'El reconocimiento de voz no está disponible en este navegador. Prueba con Chrome o Edge.'
         );
         return;
       }
 
       try {
         const SpeechRecognition =
-          window.webkitSpeechRecognition || (window as any).SpeechRecognition;
+          window.webkitSpeechRecognition || window.SpeechRecognition;
 
-        if (!recognitionRef.current) {
-          recognitionRef.current = new SpeechRecognition();
-          recognitionRef.current.continuous = false;
-          recognitionRef.current.interimResults = false;
+        if (recognitionRef.current) {
+          recognitionRef.current.abort();
+          recognitionRef.current = null;
         }
 
+        recognitionRef.current = new SpeechRecognition();
+
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        recognitionRef.current.maxAlternatives = 1;
         recognitionRef.current.lang = preferredAccent === 'uk' ? 'en-GB' : 'en-US';
 
         const recognition = recognitionRef.current;
@@ -111,15 +132,14 @@ export const useSpeechRecognition = () => {
           let spokenText = '';
 
           for (let i = 0; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              spokenText += event.results[i][0].transcript;
-            }
+            spokenText += event.results[i][0]?.transcript || '';
           }
 
           const score = calculateSimilarity(spokenText, expectedTerm);
           const isCorrect = score >= 80;
 
           let feedback = '';
+
           if (isCorrect) {
             feedback = '✓ Excellent pronunciation!';
           } else if (score >= 60) {
@@ -129,7 +149,7 @@ export const useSpeechRecognition = () => {
           }
 
           onResult({
-            spoken: spokenText,
+            spoken: spokenText.trim(),
             score,
             isCorrect,
             feedback,
@@ -141,13 +161,18 @@ export const useSpeechRecognition = () => {
         recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
           setIsListening(false);
 
-          let errorMessage = 'Error recognizing speech';
+          let errorMessage = 'No se pudo reconocer la pronunciación.';
+
           if (event.error === 'no-speech') {
-            errorMessage = 'No speech detected. Try again.';
+            errorMessage = 'No se detectó voz. Intenta hablar más cerca del micrófono.';
+          } else if (event.error === 'audio-capture') {
+            errorMessage = 'No se encontró un micrófono disponible.';
           } else if (event.error === 'network') {
-            errorMessage = 'Network error. Check your connection.';
+            errorMessage = 'Error de red. Revisa tu conexión e intenta nuevamente.';
           } else if (event.error === 'not-allowed') {
-            errorMessage = 'Microphone permission denied.';
+            errorMessage = 'Permiso de micrófono denegado. Activa el permiso en el navegador.';
+          } else if (event.error === 'aborted') {
+            errorMessage = 'La grabación fue cancelada. Intenta nuevamente.';
           }
 
           setError(errorMessage);
@@ -159,7 +184,7 @@ export const useSpeechRecognition = () => {
 
         recognition.start();
       } catch (err) {
-        setError('Failed to initialize speech recognition');
+        setError('No se pudo inicializar el micrófono. Intenta recargar la página.');
         setIsListening(false);
       }
     },

@@ -69,10 +69,17 @@ const PronunciationExercise: React.FC<PronunciationExerciseProps> = ({
 
       {/* Term Display */}
       <div className="text-center mb-8 p-6 bg-bg-elevated rounded-xl">
-        <p className="text-3xl font-bold text-primary-500 mb-2">{term}</p>
-        <p className="text-lg font-mono text-secondary mb-3">{phonetic}</p>
-        <p className="text-sm text-text-secondary italic">{pronunciation_guide}</p>
-      </div>
+      <p className="text-sm font-semibold text-text-secondary mb-2">
+        Oración a pronunciar
+      </p>
+      <p className="text-4xl font-bold text-primary-500 mb-2 leading-tight">
+         {term}
+       </p>
+  <p className="text-lg font-mono text-secondary mb-3">{phonetic}</p>
+  <p className="text-base text-text-primary italic leading-relaxed">
+    {pronunciation_guide}
+  </p>
+</div>
 
       {/* Actions */}
       <div className="flex gap-4 justify-center mb-8 flex-wrap">

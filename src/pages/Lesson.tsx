@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
-import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/ui/ProgressBar';
-import { PronunciationCard, PronunciationExercise, MultipleChoiceExercise, FillInBlankExercise } from '@/components/features';
-import { cybersecurityTerms, frontendTerms, backendTerms, databaseTerms, devopsTerms, networkingTerms } from '@/data/terms';
+import {
+  PronunciationCard,
+  PronunciationExercise,
+  MultipleChoiceExercise,
+  FillInBlankExercise,
+} from '@/components/features';
+import {
+  cybersecurityTerms,
+  frontendTerms,
+  backendTerms,
+  databaseTerms,
+  devopsTerms,
+  networkingTerms,
+} from '@/data/terms';
 import { Term, ExerciseResult } from '@/types/index';
 import { useUserStore } from '@/store/userStore';
 import { useProgress } from '@/hooks/useProgress';
@@ -19,32 +30,54 @@ const getExerciseType = (termIndex: number): ExerciseType => {
   return types[termIndex % types.length];
 };
 
+const areaNameMap: Record<string, string> = {
+  cybersecurity: 'Cybersecurity',
+  frontend: 'Web Frontend',
+  backend: 'Backend',
+  database: 'Databases',
+  devops: 'DevOps',
+  networking: 'Networking',
+};
+
+const getAreaLabel = (areaId?: string): string => {
+  if (!areaId) return 'Área no definida';
+  return areaNameMap[areaId] || areaId;
+};
+
 const Lesson: React.FC = () => {
   const { areaId, lessonId } = useParams<{ areaId: string; lessonId: string }>();
   const navigate = useNavigate();
+
   const recordTermAttempt = useUserStore((state) => state.recordTermAttempt);
   const markTermLearned = useUserStore((state) => state.markTermLearned);
   const updateStreak = useUserStore((state) => state.updateStreak);
   const addCompletedLesson = useUserStore((state) => state.addCompletedLesson);
   const profile = useUserStore((state) => state.profile);
+
   const { getLevelInfo } = useProgress();
   const levelInfo = getLevelInfo();
-  
+
   const [terms, setTerms] = useState<Term[]>([]);
   const [currentTermIndex, setCurrentTermIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [lessonCompleted, setLessonCompleted] = useState(false);
   const [sessionSeed, setSessionSeed] = useState(() => Date.now());
+  const transitionTimeoutRef = useRef<number | null>(null);
 
-  // Get lesson difficulty based on user level
   const getLessonLevel = (): 'beginner' | 'intermediate' | 'advanced' => {
     if (levelInfo.number >= 5) return 'advanced';
     if (levelInfo.number >= 3) return 'intermediate';
     return 'beginner';
   };
 
-  // Get terms for the selected area - all terms shuffled randomly
+  const clearTransitionTimeout = () => {
+    if (transitionTimeoutRef.current) {
+      window.clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = null;
+    }
+  };
+
   useEffect(() => {
     const areaTermMap: Record<string, Term[]> = {
       cybersecurity: cybersecurityTerms,
@@ -56,14 +89,8 @@ const Lesson: React.FC = () => {
     };
 
     const areaTerms = areaTermMap[areaId || ''] || [];
-    
-    // Get all terms from the selected area
-    let availableTerms = areaTerms.length > 0 ? areaTerms : [];
-    
-    // Shuffle array using Fisher-Yates algorithm
+    const availableTerms = areaTerms.length > 0 ? areaTerms : [];
     const shuffled = [...availableTerms].sort(() => Math.random() - 0.5);
-    
-    // Take 20 terms per sesión (o todos si hay menos de 20)
     const selectedTerms = shuffled.slice(0, Math.min(20, shuffled.length));
 
     setTerms(selectedTerms.length > 0 ? selectedTerms : availableTerms.slice(0, 10));
@@ -72,6 +99,12 @@ const Lesson: React.FC = () => {
     setShowResult(false);
     setLessonCompleted(false);
   }, [areaId, sessionSeed]);
+
+  useEffect(() => {
+    return () => {
+      clearTransitionTimeout();
+    };
+  }, []);
 
   if (terms.length === 0) {
     return (
@@ -86,30 +119,33 @@ const Lesson: React.FC = () => {
   const currentTerm = terms[currentTermIndex];
   const isLastTerm = currentTermIndex === terms.length - 1;
 
+  const goToNextStep = () => {
+    clearTransitionTimeout();
+
+    if (isLastTerm) {
+      addCompletedLesson(`${areaId || 'area'}-${lessonId || '1'}`);
+      updateStreak((profile.streak || 0) + 1);
+      setLessonCompleted(true);
+    } else {
+      setCurrentTermIndex((previousIndex) => previousIndex + 1);
+      setShowResult(false);
+    }
+  };
+
   const handleExerciseComplete = (result: ExerciseResult) => {
     recordTermAttempt(currentTerm.id, result.isCorrect);
-    
-    // Mark term as learned when completed correctly
+
     if (result.isCorrect) {
       markTermLearned(currentTerm.id, result.score || 100);
-    }
-    
-    if (result.isCorrect) {
       setCorrectAnswers((prev) => prev + 1);
     }
-    setShowResult(true);
 
-    setTimeout(() => {
-      if (isLastTerm) {
-        // Mark lesson completion and update streak once per day
-        addCompletedLesson(`${areaId || 'area'}-${lessonId || '1'}`);
-        updateStreak((profile.streak || 0) + 1);
-        setLessonCompleted(true);
-      } else {
-        setCurrentTermIndex(currentTermIndex + 1);
-        setShowResult(false);
-      }
-    }, 2000);
+    setShowResult(true);
+    clearTransitionTimeout();
+
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      goToNextStep();
+    }, 3000);
   };
 
   const totalQuestions = terms.length;
@@ -134,6 +170,21 @@ const Lesson: React.FC = () => {
           </button>
         </motion.div>
 
+{/* Breadcrumb */}
+<motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  className="mb-4 text-sm text-text-secondary"
+>
+  <span className="hover:text-primary-500 transition-colors">Home</span>
+  <span className="mx-2">/</span>
+  <span>{getAreaLabel(areaId)}</span>
+  <span className="mx-2">/</span>
+  <span className="text-primary-500 font-semibold">
+    Lección {lessonId || '1'}
+  </span>
+</motion.div>
+
         {/* Progress */}
         <motion.div className="mb-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="flex justify-between items-center mb-4">
@@ -145,15 +196,17 @@ const Lesson: React.FC = () => {
                 Term {currentTermIndex + 1}/{terms.length} • {correctAnswers} correct
               </p>
             </div>
+
             <div className="text-right">
               <span className="text-sm text-text-secondary">
                 {Math.round(((currentTermIndex + 1) / terms.length) * 100)}% complete
               </span>
             </div>
           </div>
-          <ProgressBar 
-            current={currentTermIndex + 1} 
-            max={terms.length} 
+
+          <ProgressBar
+            current={currentTermIndex + 1}
+            max={terms.length}
             color="bg-primary-500"
             showLabel={false}
           />
@@ -179,7 +232,11 @@ const Lesson: React.FC = () => {
 
         {/* Exercise */}
         {!showResult && !lessonCompleted && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <motion.div
+            key={`${currentTerm.id}-${getExerciseType(currentTermIndex)}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             {getExerciseType(currentTermIndex) === 'pronunciation' && (
               <PronunciationExercise
                 term={currentTerm.english}
@@ -188,6 +245,7 @@ const Lesson: React.FC = () => {
                 onSubmit={handleExerciseComplete}
               />
             )}
+
             {getExerciseType(currentTermIndex) === 'fillInBlank' && (
               <FillInBlankExercise
                 question={`Type the English word: "${currentTerm.definition_es.substring(0, 50)}..."`}
@@ -200,10 +258,16 @@ const Lesson: React.FC = () => {
                 onSubmit={handleExerciseComplete}
               />
             )}
+
             {getExerciseType(currentTermIndex) === 'multipleChoice' && (
               <MultipleChoiceExercise
                 question={`What is the correct definition of "${currentTerm.english}"?`}
-                options={[currentTerm.definition_en, 'Random definition', 'Another random', 'Yet another']}
+                options={[
+                  currentTerm.definition_en,
+                  'Random definition',
+                  'Another random',
+                  'Yet another',
+                ]}
                 correctAnswer={currentTerm.definition_en}
                 explanation={currentTerm.definition_en}
                 onSubmit={handleExerciseComplete}
@@ -220,9 +284,27 @@ const Lesson: React.FC = () => {
             className="text-center"
           >
             <div className="text-4xl mb-4">✨</div>
-            <p className="text-xl text-secondary font-semibold">
+
+            <p className="text-xl text-secondary font-semibold mb-3">
               {isLastTerm ? 'Lesson Complete!' : 'Moving to next term...'}
             </p>
+
+            <p className="text-sm text-text-secondary mb-4">
+              Progreso: {currentTermIndex + 1}/{terms.length} términos completados
+            </p>
+
+            <ProgressBar
+              current={currentTermIndex + 1}
+              max={terms.length}
+              color="bg-secondary"
+              showLabel={false}
+            />
+
+            <div className="mt-5">
+              <Button onClick={goToNextStep} size="lg">
+                {isLastTerm ? 'Siguiente lección →' : 'Siguiente término →'}
+              </Button>
+            </div>
           </motion.div>
         )}
 
@@ -239,10 +321,12 @@ const Lesson: React.FC = () => {
                   <div className="text-2xl font-bold text-secondary">{correctAnswers}</div>
                   <div className="text-xs text-text-secondary">Correctas</div>
                 </div>
+
                 <div className="p-3 rounded-xl bg-bg-elevated">
                   <div className="text-2xl font-bold text-accent">{incorrectAnswers}</div>
                   <div className="text-xs text-text-secondary">Incorrectas</div>
                 </div>
+
                 <div className="p-3 rounded-xl bg-bg-elevated">
                   <div className="text-2xl font-bold text-primary-500">{accuracy}%</div>
                   <div className="text-xs text-text-secondary">Precisión</div>
@@ -250,17 +334,23 @@ const Lesson: React.FC = () => {
               </div>
 
               <div className="mb-6">
-                <ProgressBar current={correctAnswers} max={Math.max(1, totalQuestions)} color="bg-secondary" animated={false} showLabel={false} />
+                <ProgressBar
+                  current={correctAnswers}
+                  max={Math.max(1, totalQuestions)}
+                  color="bg-secondary"
+                  animated={false}
+                  showLabel={false}
+                />
                 <p className="text-xs text-text-secondary mt-2">
                   {correctAnswers} de {totalQuestions} preguntas
                 </p>
               </div>
 
               <div className="flex gap-3">
-                <Button className="flex-1" onClick={() => navigate('/')}
-                >
+                <Button className="flex-1" onClick={() => navigate('/')}>
                   Volver al inicio
                 </Button>
+
                 <Button
                   className="flex-1"
                   variant="outline"

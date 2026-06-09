@@ -47,15 +47,23 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
           <h2 className="text-4xl font-bold text-primary-500 mb-2">{term}</h2>
           <p className="text-xl text-secondary font-mono">{phonetic}</p>
         </div>
-        <motion.button
-          onClick={handleSpeak}
-          className="w-16 h-16 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          disabled={!isSupported || !soundEnabled}
-        >
-          <Volume2 size={32} />
-        </motion.button>
+        <div className="flex flex-col items-center gap-1">
+  <motion.button
+    onClick={handleSpeak}
+    className="w-16 h-16 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl transition-colors disabled:opacity-50"
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.95 }}
+    disabled={!isSupported || !soundEnabled}
+    title="Escuchar"
+    aria-label="Escuchar pronunciación"
+  >
+    <Volume2 size={36} />
+  </motion.button>
+
+  <span className="text-xs font-semibold text-text-secondary">
+    Escuchar
+  </span>
+</div>
       </div>
 
       {/* Pronunciation Guide */}
@@ -65,7 +73,13 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
       </div>
 
       {/* Definitions */}
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
+<div className="mb-3">
+  <p className="text-sm font-semibold text-text-secondary">
+    Definición
+  </p>
+</div>
+
+<div className="grid md:grid-cols-2 gap-4 mb-6">
         <div className="p-4 bg-primary-500 bg-opacity-10 rounded-xl border border-primary-500 border-opacity-20">
           <p className="text-sm text-primary-400 mb-2 font-semibold">English</p>
           <p className="text-text-primary">{definition_en}</p>
