@@ -1,6 +1,14 @@
 export type TechArea = 'cybersecurity' | 'frontend' | 'backend' | 'database' | 'devops' | 'networking';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
 
+export interface PracticalExample {
+  title: string;
+  description: string;
+  code: string;
+  language: 'javascript' | 'sql' | 'python' | 'bash' | 'html' | 'css' | 'typescript';
+  context: string;
+}
+
 export interface Term {
   id: string;
   english: string;
@@ -15,6 +23,7 @@ export interface Term {
   contextSentence: string;    // Real context sentence in English
   tags: string[];
   relatedTerms: string[];     // Term IDs of related terms
+  practicalExamples?: PracticalExample[]; // P8: Ejemplos prácticos
 }
 
 export type ExerciseType = 

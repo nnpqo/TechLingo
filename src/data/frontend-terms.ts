@@ -6,75 +6,171 @@ export const frontendTerms: Term[] = [
   {
     "id": "frontend_000001",
     "english": "HTML",
-    "spanish": "html",
-    "phonetic": "/ˈtɛrm/",
-    "pronunciation_guide": "html",
-    "definition_en": "Professional term in frontend: HTML. Important concept for frontend professionals.",
-    "definition_es": "Término profesional en frontend: html. Concepto importante para profesionales de frontend.",
+    "spanish": "HTML - HyperText Markup Language",
+    "phonetic": "/ˈeɪtʃ.tɛml/",
+    "pronunciation_guide": "éich-té-e-eme-ele",
+    "definition_en": "The standard markup language for creating web pages and web applications. It provides the structure and content of websites.",
+    "definition_es": "El lenguaje estándar para crear páginas web. Define la estructura y el contenido de los sitios web usando etiquetas.",
     "area": "frontend",
     "level": "beginner",
-    "codeExample": "// Example of HTML\nconst html = true;",
-    "contextSentence": "In modern frontend development, HTML plays a crucial role in system design.",
+    "codeExample": "<div class=\"container\">\n  <h1>Welcome</h1>\n  <p>This is HTML</p>\n</div>",
+    "contextSentence": "When you visit Amazon, you see products displayed in organized sections created with HTML elements.",
+    "practicalExamples": [
+      {
+        "title": "Creating a Navigation Menu",
+        "description": "Use HTML semantic tags to structure a navigation bar with links to different pages of your website.",
+        "code": "<nav>\n  <ul>\n    <li><a href=\"/home\">Home</a></li>\n    <li><a href=\"/products\">Products</a></li>\n    <li><a href=\"/contact\">Contact</a></li>\n  </ul>\n</nav>",
+        "language": "html",
+        "context": "In a typical e-commerce website, HTML nav elements organize menu links that help users navigate to different sections."
+      },
+      {
+        "title": "Building a Contact Form",
+        "description": "Create an HTML form where users can input their name, email, and message to contact the company.",
+        "code": "<form action=\"/submit\" method=\"POST\">\n  <input type=\"text\" placeholder=\"Your Name\" required />\n  <input type=\"email\" placeholder=\"Your Email\" required />\n  <textarea placeholder=\"Message\"></textarea>\n  <button type=\"submit\">Send</button>\n</form>",
+        "language": "html",
+        "context": "Every contact page needs an HTML form to collect user information and send it to the server for processing."
+      },
+      {
+        "title": "Displaying a Product Card",
+        "description": "Structure a product card with an image, title, price, and a purchase button using semantic HTML.",
+        "code": "<article class=\"product-card\">\n  <img src=\"product.jpg\" alt=\"Product\" />\n  <h3>Wireless Headphones</h3>\n  <p class=\"price\">$99.99</p>\n  <button>Add to Cart</button>\n</article>",
+        "language": "html",
+        "context": "Online stores use HTML cards to display products in a grid layout for easy browsing and purchasing."
+      }
+    ],
     "tags": [
       "frontend",
       "beginner",
-      "html"
+      "markup",
+      "structure"
     ],
     "relatedTerms": []
   },
   {
     "id": "frontend_000002",
-    "english": "multi-layer CSS",
-    "spanish": "multi-layer css",
-    "phonetic": "/ˈtɛrm/",
-    "pronunciation_guide": "multi-layer",
-    "definition_en": "Professional term in frontend: multi-layer CSS. Important concept for frontend professionals.",
-    "definition_es": "Término profesional en frontend: multi-layer css. Concepto importante para profesionales de frontend.",
+    "english": "CSS Flexbox",
+    "spanish": "CSS Flexbox - Layout Flexible",
+    "phonetic": "/ˈflɛks.bɑːks/",
+    "pronunciation_guide": "flecs-box",
+    "definition_en": "A CSS layout model that allows responsive arrangement of elements in a container, distributing space efficiently.",
+    "definition_es": "Un modelo de diseño CSS que permite distribuir elementos de forma flexible y responsiva dentro de un contenedor.",
     "area": "frontend",
-    "level": "beginner",
-    "codeExample": "// Example of multi-layer CSS\nconst multi-layer_css = true;",
-    "contextSentence": "In modern frontend development, multi-layer CSS plays a crucial role in system design.",
+    "level": "intermediate",
+    "codeExample": ".container {\n  display: flex;\n  justify-content: space-between;\n}",
+    "contextSentence": "Netflix uses CSS Flexbox to arrange movie cards that stack vertically on mobile phones but spread horizontally on desktop screens.",
+    "practicalExamples": [
+      {
+        "title": "Centering a Modal Dialog",
+        "description": "Use flexbox to center a popup modal dialog both horizontally and vertically on the screen.",
+        "code": ".modal {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: fixed;\n  width: 100%;\n  height: 100%;\n}",
+        "language": "css",
+        "context": "When users trigger a modal dialog, flexbox ensures it stays centered regardless of screen size."
+      },
+      {
+        "title": "Building a Responsive Navbar",
+        "description": "Create a navigation bar that uses flexbox to distribute menu items evenly across the width.",
+        "code": ".navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 2rem;\n}\n.navbar a {\n  margin: 0 1rem;\n}",
+        "language": "css",
+        "context": "Mobile apps and websites use flexbox navbars to keep navigation items organized and spaced properly."
+      },
+      {
+        "title": "Creating a Flexible Card Grid",
+        "description": "Use flexbox to create a responsive grid of cards that wraps to the next row on smaller screens.",
+        "code": ".card-container {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 2rem;\n}\n.card {\n  flex: 1 1 250px;\n  min-width: 250px;\n}",
+        "language": "css",
+        "context": "E-commerce sites use flexbox grids to display products that adapt beautifully to mobile and desktop screens."
+      }
+    ],
     "tags": [
       "frontend",
-      "beginner",
-      "multi-layer css"
+      "intermediate",
+      "layout",
+      "responsive"
     ],
     "relatedTerms": []
   },
   {
     "id": "frontend_000003",
-    "english": "JavaScript analysis",
-    "spanish": "javascript analysis",
-    "phonetic": "/ˈtɛrm/",
-    "pronunciation_guide": "javascript",
-    "definition_en": "Professional term in frontend: JavaScript analysis. Important concept for frontend professionals.",
-    "definition_es": "Término profesional en frontend: javascript analysis. Concepto importante para profesionales de frontend.",
+    "english": "Event Listener",
+    "spanish": "Event Listener - Escuchador de Eventos",
+    "phonetic": "/ɪˈvɛnt ˈlɪsənər/",
+    "pronunciation_guide": "i-vent li-so-ner",
+    "definition_en": "A JavaScript function that waits for a specific event to occur on an HTML element and executes code in response.",
+    "definition_es": "Una función que espera a que ocurra un evento específico en un elemento HTML y ejecuta código en respuesta.",
     "area": "frontend",
     "level": "beginner",
-    "codeExample": "// Example of JavaScript analysis\nconst javascript_analysis = true;",
-    "contextSentence": "In modern frontend development, JavaScript analysis plays a crucial role in system design.",
+    "codeExample": "button.addEventListener('click', function() {\n  console.log('Button clicked!');\n});",
+    "contextSentence": "When you type in Google's search bar, an event listener detects your keystrokes and instantly shows suggested search results.",
+    "practicalExamples": [
+      {
+        "title": "Handling a Form Submission",
+        "description": "Listen for when a user clicks the submit button to process and validate the form data.",
+        "code": "const form = document.querySelector('form');\nform.addEventListener('submit', (e) => {\n  e.preventDefault();\n  console.log('Form submitted');\n  // Process form data\n});",
+        "language": "javascript",
+        "context": "Web applications use submit event listeners to handle user form submissions without reloading the page."
+      },
+      {
+        "title": "Responding to User Input",
+        "description": "Watch for when a user types in a search box and trigger real-time search results.",
+        "code": "const searchInput = document.getElementById('search');\nsearchInput.addEventListener('input', (e) => {\n  const query = e.target.value;\n  filterResults(query);\n});",
+        "language": "javascript",
+        "context": "Search features on websites listen to each keystroke to provide instant filtering of results."
+      },
+      {
+        "title": "Toggling UI Elements",
+        "description": "Listen for clicks on a button to show or hide a dropdown menu or sidebar.",
+        "code": "const toggleBtn = document.getElementById('toggleBtn');\nconst menu = document.getElementById('menu');\ntoggleBtn.addEventListener('click', () => {\n  menu.classList.toggle('hidden');\n});",
+        "language": "javascript",
+        "context": "Mobile apps use click listeners to open/close navigation menus and dropdown options."
+      }
+    ],
     "tags": [
       "frontend",
       "beginner",
-      "javascript analysis"
+      "javascript",
+      "interaction"
     ],
     "relatedTerms": []
   },
   {
     "id": "frontend_000004",
-    "english": "DOM",
-    "spanish": "dom",
-    "phonetic": "/ˈtɛrm/",
-    "pronunciation_guide": "dom",
-    "definition_en": "Professional term in frontend: DOM. Important concept for frontend professionals.",
-    "definition_es": "Término profesional en frontend: dom. Concepto importante para profesionales de frontend.",
+    "english": "DOM Manipulation",
+    "spanish": "DOM Manipulation - Manipulación del DOM",
+    "phonetic": "/ˈdɑːm ˌmænɪpjəˈleɪʃən/",
+    "pronunciation_guide": "dom ma-ni-pu-lei-shon",
+    "definition_en": "The process of using JavaScript to dynamically access, modify, add, or remove HTML elements and their content.",
+    "definition_es": "El proceso de usar JavaScript para acceder dinámicamente, modificar, añadir o eliminar elementos HTML.",
     "area": "frontend",
     "level": "beginner",
-    "codeExample": "// Example of DOM\nconst dom = true;",
-    "contextSentence": "In modern frontend development, DOM plays a crucial role in system design.",
+    "codeExample": "const element = document.getElementById('myElement');\nelement.textContent = 'New content';\nelement.style.color = 'blue';",
+    "contextSentence": "When you click 'Add to Cart' on Shopify stores, DOM manipulation dynamically adds the item to your cart counter without reloading the page."
+    "practicalExamples": [
+      {
+        "title": "Updating User Information on the Page",
+        "description": "Dynamically change the user's name and profile picture displayed on the page after login.",
+        "code": "const userName = document.getElementById('userName');\nconst userImage = document.getElementById('userImage');\n\nuserName.textContent = response.user.name;\nuserImage.src = response.user.profilePic;",
+        "language": "javascript",
+        "context": "Social media platforms and dashboards update user information dynamically without reloading the page."
+      },
+      {
+        "title": "Adding Items to a Shopping Cart",
+        "description": "When a user clicks 'Add to Cart', dynamically create and insert a new item into their cart list.",
+        "code": "const newItem = document.createElement('li');\nnewItem.textContent = product.name + ' - $' + product.price;\nnewItem.className = 'cart-item';\ndocument.getElementById('cartList').appendChild(newItem);",
+        "language": "javascript",
+        "context": "E-commerce websites dynamically add products to shopping carts without page refreshes."
+      },
+      {
+        "title": "Toggling Dark/Light Mode",
+        "description": "Apply CSS classes dynamically to switch the entire page between dark and light themes.",
+        "code": "const darkModeToggle = document.getElementById('darkToggle');\ndarkModeToggle.addEventListener('click', () => {\n  document.body.classList.toggle('dark-mode');\n  localStorage.setItem('theme', 'dark');\n});",
+        "language": "javascript",
+        "context": "Modern apps store user theme preferences and apply them instantly by manipulating CSS classes."
+      }
+    ],
     "tags": [
       "frontend",
       "beginner",
+      "javascript",
       "dom"
     ],
     "relatedTerms": []

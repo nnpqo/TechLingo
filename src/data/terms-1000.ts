@@ -9,6 +9,7 @@ type Base = {
   pronunciation_guide?: string;
   definition_en: string;
   definition_es: string;
+  contextSentence?: string;
   tags?: string[];
 };
 
@@ -24,6 +25,8 @@ const baseTerms: Base[] = [
     definition_en: 'A security control that filters network traffic based on rules to block unauthorized access.',
     definition_es: 'Control de seguridad que filtra tráfico de red según reglas para bloquear accesos no autorizados.',
     tags: ['network', 'security'],
+    contextSentence:
+    'El firewall bloqueó una conexión sospechosa.'
   },
   {
     area: 'cybersecurity',
@@ -35,6 +38,8 @@ const baseTerms: Base[] = [
     definition_en: 'The process of converting data into an unreadable format so only authorized parties can access it.',
     definition_es: 'Proceso de convertir datos en un formato ilegible para que solo partes autorizadas puedan acceder.',
     tags: ['crypto', 'data'],
+     contextSentence:
+    'Encryption protege los datos de los clientes.'
   },
   {
     area: 'cybersecurity',
@@ -46,6 +51,8 @@ const baseTerms: Base[] = [
     definition_en: 'Verifying who a user or system is before granting access.',
     definition_es: 'Verificar quién es un usuario o sistema antes de dar acceso.',
     tags: ['identity', 'access'],
+    contextSentence:
+    'Authentication verifica la identidad del usuario.'
   },
   {
     area: 'cybersecurity',
@@ -57,6 +64,8 @@ const baseTerms: Base[] = [
     definition_en: 'Deciding what an authenticated user is allowed to do (permissions/roles).',
     definition_es: 'Decidir qué puede hacer un usuario autenticado (permisos/roles).',
     tags: ['permissions', 'rbac'],
+    contextSentence:
+    'Authorization determina qué recursos puede usar un usuario.'
   },
   {
     area: 'cybersecurity',
@@ -68,6 +77,8 @@ const baseTerms: Base[] = [
     definition_en: 'A social engineering attack that tricks people into revealing credentials or sensitive data.',
     definition_es: 'Ataque de ingeniería social que engaña para obtener credenciales o datos sensibles.',
     tags: ['social-engineering'],
+    contextSentence:
+    'El usuario recibió un correo de phishing falso.'
   },
   {
     area: 'cybersecurity',
@@ -79,6 +90,8 @@ const baseTerms: Base[] = [
     definition_en: 'Malicious software designed to harm, disrupt, or gain unauthorized access to systems.',
     definition_es: 'Software malicioso diseñado para dañar, interrumpir o acceder sin autorización a sistemas.',
     tags: ['threats'],
+    contextSentence:
+    'El antivirus detectó malware en el equipo.'
   },
   {
     area: 'cybersecurity',
@@ -89,6 +102,8 @@ const baseTerms: Base[] = [
     definition_en: 'A type of malware that encrypts data and demands payment to restore access.',
     definition_es: 'Tipo de malware que cifra datos y exige pago para restaurar el acceso.',
     tags: ['malware'],
+    contextSentence:
+    'El ransomware bloqueó el acceso a los archivos.'
   },
   {
     area: 'cybersecurity',
@@ -99,6 +114,8 @@ const baseTerms: Base[] = [
     definition_en: 'A weakness in software, hardware, or process that could be exploited by an attacker.',
     definition_es: 'Debilidad en software, hardware o procesos que podría ser explotada por un atacante.',
     tags: ['risk'],
+    contextSentence:
+    'Se corrigió una vulnerability en la aplicación.'
   },
   {
     area: 'cybersecurity',
@@ -109,6 +126,8 @@ const baseTerms: Base[] = [
     definition_en: 'A software update that fixes bugs or security vulnerabilities.',
     definition_es: 'Actualización de software que corrige errores o vulnerabilidades de seguridad.',
     tags: ['updates'],
+    contextSentence:
+    'El equipo instaló un patch de seguridad.'
   },
   {
     area: 'cybersecurity',
@@ -119,6 +138,8 @@ const baseTerms: Base[] = [
     definition_en: 'A principle where users/systems get only the permissions needed to do their job.',
     definition_es: 'Principio donde usuarios/sistemas reciben solo los permisos necesarios para su tarea.',
     tags: ['access'],
+    contextSentence:
+    'Se aplicó least privilege para limitar accesos.'
   },
   {
     area: 'cybersecurity',
@@ -129,6 +150,8 @@ const baseTerms: Base[] = [
     definition_en: 'An authentication method that requires two or more factors (password + code, etc.).',
     definition_es: 'Método de autenticación que requiere dos o más factores (contraseña + código, etc.).',
     tags: ['identity'],
+    contextSentence:
+    'MFA agrega una capa extra de seguridad.'
   },
   {
     area: 'cybersecurity',
@@ -139,6 +162,8 @@ const baseTerms: Base[] = [
     definition_en: 'A security model that assumes no implicit trust and verifies every access request.',
     definition_es: 'Modelo de seguridad que no asume confianza implícita y verifica cada solicitud de acceso.',
     tags: ['architecture'],
+    contextSentence:
+    'La empresa adoptó un modelo zero trust.'
   },
   {
     area: 'cybersecurity',
@@ -149,6 +174,8 @@ const baseTerms: Base[] = [
     definition_en: 'Security Information and Event Management: centralizes logs, alerts, and correlation for detection.',
     definition_es: 'Gestión de información y eventos de seguridad: centraliza logs, alertas y correlación para detección.',
     tags: ['logging', 'monitoring'],
+    contextSentence:
+    'El SIEM recopiló eventos de seguridad.'
   },
   {
     area: 'cybersecurity',
@@ -159,6 +186,8 @@ const baseTerms: Base[] = [
     definition_en: 'An attack that overwhelms a service with traffic to make it unavailable to legitimate users.',
     definition_es: 'Ataque que satura un servicio con tráfico para dejarlo inaccesible a usuarios legítimos.',
     tags: ['availability'],
+    contextSentence:
+    'Un DDoS attack saturó el servidor.'
   },
 
   // Frontend
@@ -171,6 +200,8 @@ const baseTerms: Base[] = [
     definition_en: 'The markup language used to structure content on the web.',
     definition_es: 'Lenguaje de marcado usado para estructurar contenido en la web.',
     tags: ['web'],
+    contextSentence:
+    'HTML define la estructura de la página.'
   },
   {
     area: 'frontend',
@@ -181,6 +212,8 @@ const baseTerms: Base[] = [
     definition_en: 'The style language used to control layout and visual appearance in the browser.',
     definition_es: 'Lenguaje de estilos para controlar layout y apariencia visual en el navegador.',
     tags: ['styles'],
+    contextSentence:
+    'CSS controla el diseño visual del sitio.'
   },
   {
     area: 'frontend',
@@ -191,6 +224,8 @@ const baseTerms: Base[] = [
     definition_en: 'A programming language used to build interactive behavior in web applications.',
     definition_es: 'Lenguaje de programación usado para crear interactividad en aplicaciones web.',
     tags: ['language'],
+    contextSentence:
+    'JavaScript actualiza la interfaz dinámicamente.'
   },
   {
     area: 'frontend',
@@ -201,6 +236,8 @@ const baseTerms: Base[] = [
     definition_en: 'A tree-like representation of a web page that JavaScript can read and modify.',
     definition_es: 'Representación en forma de árbol de una página web que JavaScript puede leer y modificar.',
     tags: ['browser'],
+    contextSentence:
+    'JavaScript modificó el DOM de la página.'
   },
   {
     area: 'frontend',
@@ -211,6 +248,8 @@ const baseTerms: Base[] = [
     definition_en: 'Designing UI so it adapts to different screen sizes and devices.',
     definition_es: 'Diseñar UI para que se adapte a diferentes pantallas y dispositivos.',
     tags: ['ui', 'mobile'],
+    contextSentence:
+    'El responsive design adapta la web al móvil.'
   },
   {
     area: 'frontend',
@@ -221,6 +260,8 @@ const baseTerms: Base[] = [
     definition_en: 'A JavaScript library for building user interfaces using components.',
     definition_es: 'Librería de JavaScript para construir interfaces usando componentes.',
     tags: ['framework'],
+    contextSentence:
+    'La interfaz fue desarrollada con React.'
   },
   {
     area: 'frontend',
@@ -231,6 +272,8 @@ const baseTerms: Base[] = [
     definition_en: 'A reusable UI building block that encapsulates structure, behavior, and styling.',
     definition_es: 'Bloque reutilizable de UI que encapsula estructura, comportamiento y estilos.',
     tags: ['ui'],
+    contextSentence:
+    'Cada component representa una parte de la interfaz.'
   },
   {
     area: 'frontend',
@@ -241,6 +284,8 @@ const baseTerms: Base[] = [
     definition_en: 'Data that changes over time and influences what the UI renders.',
     definition_es: 'Datos que cambian en el tiempo e influyen en lo que la UI renderiza.',
     tags: ['react'],
+    contextSentence:
+    'El state guarda datos temporales de la vista.'
   },
   {
     area: 'frontend',
@@ -251,6 +296,8 @@ const baseTerms: Base[] = [
     definition_en: 'Inputs passed to a component to configure its behavior and output.',
     definition_es: 'Entradas pasadas a un componente para configurar su comportamiento y salida.',
     tags: ['react'],
+    contextSentence:
+    'Los props envían datos entre componentes.'
   },
   {
     area: 'frontend',
@@ -261,6 +308,8 @@ const baseTerms: Base[] = [
     definition_en: 'Building UIs that are usable by people with disabilities (keyboard, screen readers, contrast).',
     definition_es: 'Crear UIs usables por personas con discapacidad (teclado, lectores de pantalla, contraste).',
     tags: ['ux'],
+    contextSentence:
+    'La accessibility mejora el uso para todos los usuarios.'
   },
   {
     area: 'frontend',
@@ -271,6 +320,8 @@ const baseTerms: Base[] = [
     definition_en: 'Loading code or assets only when needed to improve initial performance.',
     definition_es: 'Cargar código o recursos solo cuando se necesitan para mejorar performance inicial.',
     tags: ['performance'],
+    contextSentence:
+    'Lazy loading carga imágenes solo cuando se necesitan.'
   },
   {
     area: 'frontend',
@@ -281,6 +332,8 @@ const baseTerms: Base[] = [
     definition_en: 'A compiled set of assets (JS/CSS) produced by a build tool for the browser.',
     definition_es: 'Conjunto compilado de recursos (JS/CSS) generado por una herramienta de build para el navegador.',
     tags: ['build'],
+    contextSentence:
+    'El bundle contiene los archivos de la aplicación.'
   },
 
   // Backend
@@ -293,6 +346,8 @@ const baseTerms: Base[] = [
     definition_en: 'An interface that lets software components communicate via requests and responses.',
     definition_es: 'Interfaz que permite que componentes de software se comuniquen con requests y responses.',
     tags: ['http'],
+    contextSentence:
+    'La API envió información al cliente.'
   },
   {
     area: 'backend',
@@ -303,6 +358,8 @@ const baseTerms: Base[] = [
     definition_en: 'A specific URL/route where an API can be accessed to perform an operation.',
     definition_es: 'URL/ruta específica donde se accede a un API para realizar una operación.',
     tags: ['routing'],
+    contextSentence:
+    'El endpoint devolvió los datos solicitados.'
   },
   {
     area: 'backend',
@@ -313,6 +370,8 @@ const baseTerms: Base[] = [
     definition_en: 'A function/component that runs between a request and a handler to add behavior (auth, logging, validation).',
     definition_es: 'Función/componente que corre entre un request y el handler para agregar comportamiento (auth, logs, validación).',
     tags: ['express'],
+    contextSentence:
+    'El middleware validó la petición entrante.'
   },
   {
     area: 'backend',
@@ -323,6 +382,8 @@ const baseTerms: Base[] = [
     definition_en: 'A protection that restricts how many requests a client can make in a time window.',
     definition_es: 'Protección que restringe cuántas requests puede hacer un cliente en una ventana de tiempo.',
     tags: ['security'],
+    contextSentence:
+    'Rate limiting evita demasiadas solicitudes seguidas.'
   },
   {
     area: 'backend',
@@ -333,6 +394,8 @@ const baseTerms: Base[] = [
     definition_en: 'The protocol used for web requests and responses between clients and servers.',
     definition_es: 'Protocolo usado para requests y responses web entre clientes y servidores.',
     tags: ['web'],
+    contextSentence:
+    'HTTP se utiliza para comunicar cliente y servidor.'
   },
   {
     area: 'backend',
@@ -343,6 +406,8 @@ const baseTerms: Base[] = [
     definition_en: 'An API design style that uses standard HTTP methods and resource-oriented URLs.',
     definition_es: 'Estilo de diseño de APIs que usa métodos HTTP estándar y URLs orientadas a recursos.',
     tags: ['api'],
+    contextSentence:
+    'La API sigue principios REST.'
   },
   {
     area: 'backend',
@@ -353,6 +418,8 @@ const baseTerms: Base[] = [
     definition_en: 'JSON Web Token: a compact token format often used for authentication and authorization.',
     definition_es: 'JSON Web Token: formato compacto de token usado para autenticación y autorización.',
     tags: ['auth'],
+    contextSentence:
+    'El JWT identifica al usuario autenticado.'
   },
   {
     area: 'backend',
@@ -363,6 +430,8 @@ const baseTerms: Base[] = [
     definition_en: 'A callback URL that receives events from another system (push-based integration).',
     definition_es: 'URL de callback que recibe eventos de otro sistema (integración por push).',
     tags: ['integration'],
+    contextSentence:
+    'El webhook notificó un cambio automáticamente.'
   },
   {
     area: 'backend',
@@ -373,6 +442,8 @@ const baseTerms: Base[] = [
     definition_en: 'A system that buffers jobs/messages so work can be processed asynchronously.',
     definition_es: 'Sistema que encola jobs/mensajes para procesarlos de forma asíncrona.',
     tags: ['async'],
+    contextSentence:
+    'La queue procesó tareas en segundo plano.'
   },
   {
     area: 'backend',
@@ -383,6 +454,8 @@ const baseTerms: Base[] = [
     definition_en: 'A small, independently deployable service that owns a specific business capability.',
     definition_es: 'Servicio pequeño e independientemente desplegable que cubre una capacidad de negocio específica.',
     tags: ['architecture'],
+    contextSentence:
+    'Cada microservice cumple una función específica.'
   },
 
   // Database
@@ -395,6 +468,8 @@ const baseTerms: Base[] = [
     definition_en: 'A language used to query and manipulate data in relational databases.',
     definition_es: 'Lenguaje para consultar y manipular datos en bases relacionales.',
     tags: ['query'],
+    contextSentence:
+    'SQL consultó los datos almacenados.'
   },
   {
     area: 'database',
@@ -405,6 +480,8 @@ const baseTerms: Base[] = [
     definition_en: 'A data structure that speeds up lookups at the cost of extra storage and slower writes.',
     definition_es: 'Estructura que acelera búsquedas a cambio de más almacenamiento y escrituras más lentas.',
     tags: ['performance'],
+    contextSentence:
+    'El index aceleró la búsqueda de registros.'
   },
   {
     area: 'database',
@@ -415,6 +492,8 @@ const baseTerms: Base[] = [
     definition_en: 'A group of operations that must be executed as a single unit (commit/rollback).',
     definition_es: 'Grupo de operaciones que deben ejecutarse como una sola unidad (commit/rollback).',
     tags: ['acid'],
+    contextSentence:
+    'La transaction guardó los cambios correctamente.'
   },
   {
     area: 'database',
@@ -425,6 +504,8 @@ const baseTerms: Base[] = [
     definition_en: 'A column (or set of columns) that uniquely identifies a row in a table.',
     definition_es: 'Columna (o conjunto) que identifica de forma única una fila en una tabla.',
     tags: ['relational'],
+    contextSentence:
+    'La primary key identifica cada registro.'
   },
   {
     area: 'database',
@@ -435,6 +516,8 @@ const baseTerms: Base[] = [
     definition_en: 'A reference from one table to a primary key in another table to enforce relationships.',
     definition_es: 'Referencia de una tabla a la clave primaria de otra para asegurar relaciones.',
     tags: ['relational'],
+    contextSentence:
+    'La foreign key relaciona dos tablas.'
   },
   {
     area: 'database',
@@ -445,6 +528,8 @@ const baseTerms: Base[] = [
     definition_en: 'Combining rows from two or more tables based on a related column.',
     definition_es: 'Combinar filas de dos o más tablas en base a una columna relacionada.',
     tags: ['sql'],
+    contextSentence:
+    'El join combinó datos de varias tablas.'
   },
   {
     area: 'database',
@@ -455,6 +540,8 @@ const baseTerms: Base[] = [
     definition_en: 'Splitting a database into smaller pieces (shards) to scale horizontally.',
     definition_es: 'Dividir una base en piezas (shards) para escalar horizontalmente.',
     tags: ['scaling'],
+    contextSentence:
+    'El sharding distribuye datos entre servidores.'
   },
   {
     area: 'database',
@@ -465,6 +552,8 @@ const baseTerms: Base[] = [
     definition_en: 'The structure of a database: tables, columns, relationships, and constraints.',
     definition_es: 'Estructura de una base: tablas, columnas, relaciones y restricciones.',
     tags: ['design'],
+    contextSentence:
+    'El schema define la estructura de la base de datos.'
   },
   {
     area: 'database',
@@ -475,6 +564,8 @@ const baseTerms: Base[] = [
     definition_en: 'Designing tables to reduce duplication and improve data integrity.',
     definition_es: 'Diseñar tablas para reducir duplicación y mejorar integridad de datos.',
     tags: ['design'],
+    contextSentence:
+    'La normalization reduce datos duplicados.'
   },
   {
     area: 'database',
@@ -485,6 +576,8 @@ const baseTerms: Base[] = [
     definition_en: 'A set of properties for transactions: Atomicity, Consistency, Isolation, Durability.',
     definition_es: 'Propiedades de transacciones: atomicidad, consistencia, aislamiento y durabilidad.',
     tags: ['transactions'],
+    contextSentence:
+    'ACID garantiza operaciones confiables.'
   },
   {
     area: 'database',
@@ -495,6 +588,8 @@ const baseTerms: Base[] = [
     definition_en: 'Keeping copies of data on multiple nodes to improve availability and read scalability.',
     definition_es: 'Mantener copias de datos en múltiples nodos para mejorar disponibilidad y escalado de lecturas.',
     tags: ['availability'],
+    contextSentence:
+    'La replication mantiene copias de los datos.'
   },
   {
     area: 'database',
@@ -505,6 +600,8 @@ const baseTerms: Base[] = [
     definition_en: 'A copy of data used to restore information after loss or corruption.',
     definition_es: 'Copia de datos usada para restaurar información tras pérdida o corrupción.',
     tags: ['recovery'],
+    contextSentence:
+    'El backup permitió recuperar información.'
   },
 
   // DevOps
@@ -517,6 +614,8 @@ const baseTerms: Base[] = [
     definition_en: 'Practices and tooling to build, test, and deploy software continuously and reliably.',
     definition_es: 'Prácticas y herramientas para construir, testear y desplegar software de forma continua y confiable.',
     tags: ['pipeline'],
+    contextSentence:
+    'CI/CD automatiza pruebas y despliegues.'
   },
   {
     area: 'devops',
@@ -527,6 +626,8 @@ const baseTerms: Base[] = [
     definition_en: 'A platform to package applications into containers for consistent runtime environments.',
     definition_es: 'Plataforma para empaquetar apps en contenedores y asegurar entornos consistentes.',
     tags: ['containers'],
+    contextSentence:
+    'Docker ejecuta la aplicación en contenedores.'
   },
   {
     area: 'devops',
@@ -537,6 +638,8 @@ const baseTerms: Base[] = [
     definition_en: 'Collecting metrics and signals to understand health, performance, and availability.',
     definition_es: 'Recolectar métricas y señales para entender salud, performance y disponibilidad.',
     tags: ['metrics'],
+    contextSentence:
+    'El monitoring detectó un problema del sistema.'
   },
   {
     area: 'devops',
@@ -547,6 +650,8 @@ const baseTerms: Base[] = [
     definition_en: 'A system for orchestrating containers: scheduling, scaling, and service discovery.',
     definition_es: 'Sistema para orquestar contenedores: scheduling, escalado y descubrimiento de servicios.',
     tags: ['containers'],
+    contextSentence:
+    'Kubernetes administra múltiples contenedores.'
   },
   {
     area: 'devops',
@@ -557,6 +662,8 @@ const baseTerms: Base[] = [
     definition_en: 'A release strategy that ships to a small portion of users first to reduce risk.',
     definition_es: 'Estrategia de release que despliega primero a un pequeño porcentaje para reducir riesgo.',
     tags: ['release'],
+    contextSentence:
+    'Se utiliza canary deployment en este proyecto.'
   },
   {
     area: 'devops',
@@ -567,6 +674,8 @@ const baseTerms: Base[] = [
     definition_en: 'A release strategy with two environments (blue/green) to switch traffic safely.',
     definition_es: 'Estrategia con dos entornos (blue/green) para cambiar tráfico de forma segura.',
     tags: ['release'],
+    contextSentence:
+    'Se utiliza blue-green deployment en este proyecto.'
   },
   {
     area: 'devops',
@@ -577,6 +686,8 @@ const baseTerms: Base[] = [
     definition_en: 'Reverting to a previous stable version after a failed deployment.',
     definition_es: 'Volver a una versión estable anterior luego de un despliegue fallido.',
     tags: ['release'],
+    contextSentence:
+    'Se utiliza rollback en este proyecto.'
   },
   {
     area: 'devops',
@@ -587,6 +698,8 @@ const baseTerms: Base[] = [
     definition_en: 'An infrastructure-as-code tool that provisions cloud resources using declarative configuration.',
     definition_es: 'Herramienta de infraestructura como código que provisiona recursos cloud con configuración declarativa.',
     tags: ['iac'],
+    contextSentence:
+    'Se utiliza Terraform en este proyecto.'
   },
   {
     area: 'devops',
@@ -597,6 +710,8 @@ const baseTerms: Base[] = [
     definition_en: 'Service Level Objective: a target for reliability (e.g., latency/availability) over a period.',
     definition_es: 'Objetivo de nivel de servicio: meta de confiabilidad (latencia/disponibilidad) en un período.',
     tags: ['reliability'],
+    contextSentence:
+    'Se utiliza SLO en este proyecto.'
   },
   {
     area: 'devops',
@@ -607,6 +722,8 @@ const baseTerms: Base[] = [
     definition_en: 'Understanding system behavior from logs, metrics, and traces to debug and improve reliability.',
     definition_es: 'Entender el comportamiento del sistema con logs, métricas y trazas para depurar y mejorar confiabilidad.',
     tags: ['monitoring'],
+    contextSentence:
+    'Se utiliza observability en este proyecto.'
   },
 
   // Networking
@@ -619,6 +736,8 @@ const baseTerms: Base[] = [
     definition_en: 'A system that translates domain names into IP addresses.',
     definition_es: 'Sistema que traduce nombres de dominio a direcciones IP.',
     tags: ['internet'],
+    contextSentence:
+    'DNS traduce dominios a direcciones IP.'
   },
   {
     area: 'networking',
@@ -629,6 +748,8 @@ const baseTerms: Base[] = [
     definition_en: 'A reliable transport protocol that guarantees ordered delivery of data packets.',
     definition_es: 'Protocolo de transporte confiable que garantiza entrega ordenada de paquetes.',
     tags: ['transport'],
+    contextSentence:
+    'TCP asegura la entrega de los datos.'
   },
   {
     area: 'networking',
@@ -639,6 +760,8 @@ const baseTerms: Base[] = [
     definition_en: 'The delay between sending a request and receiving a response.',
     definition_es: 'Demora entre enviar una request y recibir una response.',
     tags: ['performance'],
+    contextSentence:
+    'La latency afectó el tiempo de respuesta.'
   },
   {
     area: 'networking',
@@ -649,6 +772,8 @@ const baseTerms: Base[] = [
     definition_en: 'A numeric address that identifies a device on a network.',
     definition_es: 'Dirección numérica que identifica un dispositivo en una red.',
     tags: ['internet'],
+    contextSentence:
+    'La IP address identifica un dispositivo en la red.'
   },
   {
     area: 'networking',
@@ -659,6 +784,8 @@ const baseTerms: Base[] = [
     definition_en: 'A logical subdivision of an IP network, often defined by a CIDR mask.',
     definition_es: 'Subdivisión lógica de una red IP, normalmente definida por una máscara CIDR.',
     tags: ['ip'],
+    contextSentence:
+    'La subnet organiza los dispositivos de una red.'
   },
   {
     area: 'networking',
@@ -669,6 +796,8 @@ const baseTerms: Base[] = [
     definition_en: 'A device that forwards packets between networks based on routing rules.',
     definition_es: 'Dispositivo que reenvía paquetes entre redes según reglas de routing.',
     tags: ['routing'],
+    contextSentence:
+    'El router dirigió el tráfico de red.'
   },
   {
     area: 'networking',
@@ -679,6 +808,8 @@ const baseTerms: Base[] = [
     definition_en: 'A device that forwards frames within a local network (LAN), typically based on MAC addresses.',
     definition_es: 'Dispositivo que reenvía tramas dentro de una red local (LAN), normalmente basado en direcciones MAC.',
     tags: ['lan'],
+    contextSentence:
+    'El switch conectó los equipos de la oficina.'
   },
   {
     area: 'networking',
@@ -689,6 +820,8 @@ const baseTerms: Base[] = [
     definition_en: 'A secure tunnel that encrypts traffic between a device and a private network.',
     definition_es: 'Túnel seguro que cifra tráfico entre un dispositivo y una red privada.',
     tags: ['security'],
+    contextSentence:
+    'La VPN protegió la conexión remota.'
   },
   {
     area: 'networking',
@@ -699,6 +832,8 @@ const baseTerms: Base[] = [
     definition_en: 'Transport Layer Security: the protocol behind HTTPS that encrypts data in transit.',
     definition_es: 'Transport Layer Security: protocolo detrás de HTTPS que cifra datos en tránsito.',
     tags: ['security'],
+    contextSentence:
+    'Se utiliza TLS en este proyecto.'
   },
   {
     area: 'networking',
@@ -709,6 +844,8 @@ const baseTerms: Base[] = [
     definition_en: 'A numeric identifier used to route traffic to the right service on a host (e.g., 443 for HTTPS).',
     definition_es: 'Identificador numérico para dirigir tráfico al servicio correcto en un host (ej., 443 para HTTPS).',
     tags: ['transport'],
+    contextSentence:
+    'Se utiliza port en este proyecto.'
   },
   {
     area: 'networking',
@@ -719,6 +856,8 @@ const baseTerms: Base[] = [
     definition_en: 'A formatted unit of data carried by a network.',
     definition_es: 'Unidad de datos con formato transportada por una red.',
     tags: ['transport'],
+    contextSentence:
+    'El packet contiene información transmitida por la red.'
   },
   {
     area: 'networking',
@@ -729,6 +868,8 @@ const baseTerms: Base[] = [
     definition_en: 'How much data can be transferred per unit of time over a connection.',
     definition_es: 'Cuánta información se puede transferir por unidad de tiempo en una conexión.',
     tags: ['performance'],
+    contextSentence:
+    'El bandwidth disponible mejoró la velocidad.'
   },
   {
     area: 'networking',
@@ -739,6 +880,8 @@ const baseTerms: Base[] = [
     definition_en: 'HTTP over TLS: encrypted communication between client and server.',
     definition_es: 'HTTP sobre TLS: comunicación cifrada entre cliente y servidor.',
     tags: ['security'],
+    contextSentence:
+    'Se utiliza HTTPS en este proyecto.'
   },
 ];
 
@@ -907,7 +1050,8 @@ const toTerm = (base: Base, id: string): Term => {
     area: base.area,
     level: base.level,
     codeExample: undefined,
-    contextSentence: `Example usage of ${base.english} in ${base.area}.`,
+    contextSentence: base.contextSentence ||
+       `The developer is working with ${base.english}.`,
     tags: [base.area, base.level, ...(base.tags || [])],
     relatedTerms: [],
   };

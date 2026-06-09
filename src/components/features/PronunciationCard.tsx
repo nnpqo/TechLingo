@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Code2, MessageSquare } from 'lucide-react';
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis';
 import { useSettingsStore } from '@/store/settingsStore';
 import Button from '@/components/ui/Button';
@@ -21,8 +21,8 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
   pronunciation_guide,
   definition_en,
   definition_es,
-  codeExample: _codeExample,
-  contextSentence: _contextSentence,
+  codeExample,
+  contextSentence,
 }) => {
   const { speak, isSupported } = useSpeechSynthesis();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
@@ -48,22 +48,19 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
           <p className="text-xl text-secondary font-mono">{phonetic}</p>
         </div>
         <div className="flex flex-col items-center gap-1">
-  <motion.button
-    onClick={handleSpeak}
-    className="w-16 h-16 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl transition-colors disabled:opacity-50"
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
-    disabled={!isSupported || !soundEnabled}
-    title="Escuchar"
-    aria-label="Escuchar pronunciación"
-  >
-    <Volume2 size={36} />
-  </motion.button>
-
-  <span className="text-xs font-semibold text-text-secondary">
-    Escuchar
-  </span>
-</div>
+          <motion.button
+            onClick={handleSpeak}
+            className="w-16 h-16 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl transition-colors disabled:opacity-50"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            disabled={!isSupported || !soundEnabled}
+            title="Escuchar"
+            aria-label="Escuchar pronunciación"
+          >
+            <Volume2 size={36} />
+          </motion.button>
+          <span className="text-xs font-semibold text-text-secondary">Escuchar</span>
+        </div>
       </div>
 
       {/* Pronunciation Guide */}
@@ -73,13 +70,11 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
       </div>
 
       {/* Definitions */}
-<div className="mb-3">
-  <p className="text-sm font-semibold text-text-secondary">
-    Definición
-  </p>
-</div>
+      <div className="mb-3">
+        <p className="text-sm font-semibold text-text-secondary">Definición</p>
+      </div>
 
-<div className="grid md:grid-cols-2 gap-4 mb-6">
+      <div className="grid md:grid-cols-2 gap-4 mb-6">
         <div className="p-4 bg-primary-500 bg-opacity-10 rounded-xl border border-primary-500 border-opacity-20">
           <p className="text-sm text-primary-400 mb-2 font-semibold">English</p>
           <p className="text-text-primary">{definition_en}</p>
@@ -89,6 +84,29 @@ const PronunciationCard: React.FC<PronunciationCardProps> = ({
           <p className="text-text-primary">{definition_es}</p>
         </div>
       </div>
+
+      {/* Practical Examples — P8 */}
+      {contextSentence && (
+        <div className="mb-4 p-4 bg-bg-elevated rounded-xl border border-border-color">
+          <div className="flex items-center gap-2 mb-2">
+            <MessageSquare size={16} className="text-secondary" />
+            <p className="text-sm font-semibold text-secondary">Ejemplo en contexto</p>
+          </div>
+          <p className="text-text-primary italic">"{contextSentence}"</p>
+        </div>
+      )}
+
+      {codeExample && (
+        <div className="p-4 bg-bg-dark rounded-xl border border-border-color">
+          <div className="flex items-center gap-2 mb-3">
+            <Code2 size={16} className="text-primary-400" />
+            <p className="text-sm font-semibold text-primary-400">Ejemplo de código</p>
+          </div>
+          <pre className="text-sm text-text-primary font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
+            {codeExample}
+          </pre>
+        </div>
+      )}
     </motion.div>
   );
 };

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
-import { PronunciationCard } from '@/components/features';
+import { PronunciationCard, DefinitionCard } from '@/components/features';
 import { cybersecurityTerms, frontendTerms, backendTerms, databaseTerms, devopsTerms, networkingTerms } from '@/data/terms';
 import { Term, TechArea } from '@/types/index';
 import { Search } from 'lucide-react';
@@ -119,6 +119,17 @@ const Glossary: React.FC = () => {
                   codeExample={selectedTerm.codeExample}
                   contextSentence={selectedTerm.contextSentence}
                 />
+
+                {selectedTerm.practicalExamples && selectedTerm.practicalExamples.length > 0 && (
+                  <DefinitionCard
+                    english={selectedTerm.english}
+                    spanish={selectedTerm.spanish}
+                    definition_en={selectedTerm.definition_en}
+                    definition_es={selectedTerm.definition_es}
+                    practicalExamples={selectedTerm.practicalExamples}
+                    level={selectedTerm.level}
+                  />
+                )}
 
                 <Card className="mt-6">
                   <h3 className="font-bold mb-3">Tags</h3>

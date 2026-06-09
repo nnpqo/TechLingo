@@ -8,12 +8,36 @@ import { useProgress } from '@/hooks/useProgress';
 import { useUserStore } from '@/store/userStore';
 import { TechArea } from '@/types/index';
 import { Flame } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { useState } from 'react';
+
+import { allTerms } from '../data/terms-1000';
+import GlobalSearchModal from '@/components/features/GlobalSearchModal';
 
 const Home: React.FC = () => {
+  const [query, setQuery] = useState('');
+  const [selectedTerm, setSelectedTerm] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const profile = useUserStore((state) => state.profile);
   const { getTotalLearned: totalLearned, getLevelInfo } = useProgress();
   const levelInfo = getLevelInfo();
+
+  const handleGlobalSearch = () => {
+    const result = allTerms.find(
+      (term) =>
+        term.english
+          .toLowerCase()
+          .includes(query.toLowerCase())
+    );
+
+    if (result) {
+      setSelectedTerm(result);
+      setIsModalOpen(true);
+    } else {
+      alert('Term not found');
+    }
+  };
 
   const areas: { id: TechArea; name: string; description: string; icon: string; color: string }[] = [
     {
@@ -94,9 +118,46 @@ const Home: React.FC = () => {
       </motion.section>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="mb-8 flex justify-center">
+          <Card className="max-w-md w-full">
+
+            <h2 className="text-xl font-bold mb-4">
+              Search a Technical Term
+            </h2>
+
+            <div className="flex gap-2">
+
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="e.g. firewall"
+                className="flex-1 px-4 py-2 rounded-lg border border-border text-black placeholder-gray-600"
+              />
+
+              <Button onClick={handleGlobalSearch}>
+                <Search size={18} />
+              </Button>
+
+            </div>
+
+          </Card>
+        </div>
         {/* Areas Overview */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Learning Areas</h2>
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold">
+                Choose a Learning Area
+            </h2>
+            <p className="text-text-secondary mt-2">
+              Select an area to explore technical vocabulary related to your field.
+            </p>
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm text-text-secondary">
+              6 available learning areas
+            </span>
+          </div>
           <div className="grid md:grid-cols-3 gap-4">
             {areas.map((area) => (
               <motion.div key={area.id} whileHover={{ y: -4 }} onClick={() => navigate(`/lesson/${area.id}/1`)} className="cursor-pointer">
@@ -111,6 +172,12 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <GlobalSearchModal
+        term={selectedTerm}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
