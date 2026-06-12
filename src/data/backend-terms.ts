@@ -190041,4 +190041,23 @@ export const backendTerms: Term[] = [
     ],
     "relatedTerms": []
   }
+  {
+    "id": "backend_010003",
+    "english": "API Gateway",
+    "spanish": "api gateway",
+    "phonetic": "/ˈtɛrm/",
+    "pronunciation_guide": "api",
+    "definition_en": "Professional term in backend: API Gateway. Important concept for backend professionals.",
+    "definition_es": "Término profesional en backend: API Gateway. Concepto importante para profesionales de backend.",
+    "area": "backend",
+    "level": "advanced",
+    "codeExample": "// Example of API Gateway\nconst api_gateway = true;",
+    "contextSentence": "In modern backend development, API Gateway plays a crucial role in system design.",
+    "tags": [
+      "backend",
+      "advanced",
+      "api gateway"
+    ],
+    "relatedTerms": []
+  }
 ] as any;
