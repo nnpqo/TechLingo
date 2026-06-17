@@ -190040,7 +190040,7 @@ export const backendTerms: Term[] = [
       "authorization"
     ],
     "relatedTerms": []
-  }
+  },
   {
     "id": "backend_010003",
     "english": "API Gateway",
