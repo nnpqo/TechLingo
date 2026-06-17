@@ -18,6 +18,7 @@ const Home: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedTerm, setSelectedTerm] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
   const profile = useUserStore((state) => state.profile);
   const { getTotalLearned: totalLearned, getLevelInfo } = useProgress();
@@ -39,6 +40,10 @@ const Home: React.FC = () => {
     }
   };
 
+  const filteredTerms = allTerms.filter((term) =>
+    term.english.toLowerCase().includes(query.toLowerCase())
+  );
+  
   const areas: { id: TechArea; name: string; description: string; icon: string; color: string }[] = [
     {
       id: 'cybersecurity',
@@ -130,16 +135,38 @@ const Home: React.FC = () => {
               <input
                 type="text"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
                 placeholder="e.g. firewall"
                 className="flex-1 px-4 py-2 rounded-lg border border-border text-black placeholder-gray-600"
               />
-
               <Button onClick={handleGlobalSearch}>
                 <Search size={18} />
               </Button>
 
             </div>
+
+            {showSuggestions && (
+              <div className="mt-2 max-h-60 overflow-y-auto border border-border rounded-lg bg-white">
+                {filteredTerms.slice(0, 20).map((term) => (
+                  <div
+                    key={term.id}
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 text-black"
+                    onClick={() => {
+                     setQuery(term.english);
+                     setSelectedTerm(term);
+                     setIsModalOpen(true);
+                     setShowSuggestions(false);
+                    }}
+                  >
+                    {term.english}
+                  </div>
+                ))}
+              </div>
+            )}
 
           </Card>
         </div>
