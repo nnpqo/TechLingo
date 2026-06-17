@@ -9,7 +9,7 @@ import { useUserStore } from '@/store/userStore';
 import { TechArea } from '@/types/index';
 import { Flame } from 'lucide-react';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import { allTerms } from '../data/terms-1000';
 import GlobalSearchModal from '@/components/features/GlobalSearchModal';
@@ -19,6 +19,18 @@ const Home: React.FC = () => {
   const [selectedTerm, setSelectedTerm] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const navigate = useNavigate();
   const profile = useUserStore((state) => state.profile);
   const { getTotalLearned: totalLearned, getLevelInfo } = useProgress();
@@ -124,7 +136,7 @@ const Home: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-8 flex justify-center">
-          <Card className="max-w-md w-full">
+          <Card ref={searchContainerRef} className="max-w-md w-full">
 
             <h2 className="text-xl font-bold mb-4">
               Search a Technical Term

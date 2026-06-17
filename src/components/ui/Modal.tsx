@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 
@@ -28,6 +28,16 @@ const Modal: React.FC<ModalProps> = ({
     full: 'max-w-2xl',
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -40,6 +50,8 @@ const Modal: React.FC<ModalProps> = ({
             onClick={onClose}
           />
           <motion.div
+            role="dialog"
+            aria-modal="true"
             className={`fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 w-full mx-4 ${sizes[size]}`}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

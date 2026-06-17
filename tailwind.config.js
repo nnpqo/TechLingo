@@ -21,7 +21,7 @@ export default {
         'bg-card': '#1A1A2E',
         'bg-elevated': '#16213E',
         'text-primary': '#E8E8F0',
-        'text-secondary': '#9090A0',
+        'text-secondary': '#A9A9C0',
         'border-color': '#2A2A3E',
         'cyber': '#FF4757',
         'frontend': '#1E90FF',
